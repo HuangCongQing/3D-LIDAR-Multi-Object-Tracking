@@ -68,7 +68,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
   cout << "Frame: "<<counta << "----------------------------------------"<< endl;
 
   // convert local to global-------------------------
-  double timestamp = input.header.stamp;
+  double timestamp = input.header.stamp;  // 报错： error: cannot convert ‘const _stamp_type {aka const ros::Time}’ to ‘double’
   vector<vector<double>> egoPoints;
   getOriginPoints(timestamp, egoPoints,v_gps,yaw_gps);
   
