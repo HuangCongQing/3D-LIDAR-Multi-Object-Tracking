@@ -36,7 +36,7 @@ roscore
 
 ##### Terminal 2
 ```
-rosbag play kitti_2011_09_26_drive_0005_synced.bag
+rosbag play ~/data/KittiRawdata/2011_09_26_drive_0005_sync/kitti_2011_09_26_drive_0005_synced.bag
 ```
 ##### Terminal 3
 ```
@@ -47,6 +47,10 @@ rviz
 ##### Terminal 4
 ```
 rosrun object_tracking main input:=/kitti/velo/pointcloud
+
+# personal:
+rosrun object_tracking tracking input:=/kitti/velo/pointcloud
+
 ```
 
 ### Result
