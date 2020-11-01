@@ -3,7 +3,7 @@
 ## Please notice this repository is still in progress.
 
 ### Intro
-This package includes Ground Removal, Object Clustering, Bounding Box, IMM-UKF-JPDAF, Track Management and Object Classification for 3D-LIDAR multi object tracking.
+This package includes **Ground Removal, Object Clustering, Bounding Box, IMM-UKF-JPDAF, Track Management and Object Classification** for 3D-LIDAR multi object tracking.
 The idea is mainly come from this [paper](https://repository.tudelft.nl/islandora/object/uuid:f536b829-42ae-41d5-968d-13bbaa4ec736?collection=education).
 
 ### Setup
