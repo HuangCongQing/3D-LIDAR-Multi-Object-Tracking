@@ -1,5 +1,5 @@
 <launch>
-   <include file="$(find velodyne_pointcloud)/launch/32e_points.launch" />
+   <!-- <include file="$(find velodyne_pointcloud)/launch/32e_points.launch" /> -->
    <node
 	name= "ground" 
 	pkg= "object_tracking"
@@ -12,6 +12,13 @@
 	name= "cluster" 
 	pkg= "object_tracking"
 	type="cluster"
+	output= "screen"
+	required = "true">
+   </node>
+   <node
+	name= "tracking" 
+	pkg= "object_tracking"
+	type="tracking"
 	output= "screen"
 	required = "true">
    </node>
