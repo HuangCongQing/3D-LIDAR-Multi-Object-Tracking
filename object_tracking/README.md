@@ -36,7 +36,14 @@ roscore
 
 ##### Terminal 2
 ```
-rosbag play ~/data/KittiRawdata/2011_09_26_drive_0005_sync/kitti_2011_09_26_drive_0005_synced.bag
+# kitti官方
+rosbag play ~/data/KittiRawdata/2011_09_26_drive_0005_sync/kitti_2011_09_26_drive_0005_synced.bag --loop
+
+# changshu bag
+rosbag play  /home/hcq/data/changshu_bag/2018-06-04-16-46-11.bag --loop
+
+
+
 ```
 ##### Terminal 3
 ```
@@ -47,9 +54,9 @@ rviz
 ##### Terminal 4
 ```
 
-// 推荐运行launch
+#  推荐运行launch
 roslaunch  object_tracking test.launch
-// 复杂
+#  复杂
 rosrun object_tracking ground
 rosrun object_tracking cluster
 rosrun object_tracking tracking input:=/kitti/velo/pointcloud
