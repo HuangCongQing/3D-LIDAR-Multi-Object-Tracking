@@ -46,9 +46,12 @@ rviz
 
 ##### Terminal 4
 ```
-rosrun object_tracking main input:=/kitti/velo/pointcloud
 
-# personal:
+// 推荐运行launch
+roslaunch  object_tracking test.launch
+// 复杂
+rosrun object_tracking ground
+rosrun object_tracking cluster
 rosrun object_tracking tracking input:=/kitti/velo/pointcloud
 
 ```
