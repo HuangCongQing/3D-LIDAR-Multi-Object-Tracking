@@ -50,7 +50,7 @@ void filterCloud(PointCloud<PointXYZ>::Ptr cloud, PointCloud<PointXYZ> & filtere
         float z = cloud->points[i].z;
 
         float distance = sqrt(x * x + y * y);
-        if(distance <= rMin || distance >= rMax) {
+        if(distance <= rMin || distance >= rMax) { // 判断欧氏距离，过滤去除异常点  （ rMin = 3.4; rMax = 120;）
             continue; // filter out
         }
         else{
@@ -165,13 +165,13 @@ void outlierFilter(array<array<Cell, numBin>, numChannel>& polarData){
 }
 
 // 主函数  src/groundremove/main.cpp会调用此函数
-void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,
-              PointCloud<pcl::PointXYZ>::Ptr  elevatedCloud,
-              PointCloud<pcl::PointXYZ>::Ptr  groundCloud){
+void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
+              PointCloud<pcl::PointXYZ>::Ptr  elevatedCloud,  // 高点
+              PointCloud<pcl::PointXYZ>::Ptr  groundCloud){  // 地面点
 
     PointCloud<pcl::PointXYZ> filteredCloud;
 
-    filterCloud(cloud, filteredCloud);
+    filterCloud(cloud, filteredCloud);  // 判断欧氏距离，过滤去除异常点  （ rMin = 3.4; rMax = 120;）
     array<array<Cell, numBin>, numChannel> polarData;
     createAndMapPolarGrid(filteredCloud, polarData);
 
