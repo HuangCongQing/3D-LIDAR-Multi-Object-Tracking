@@ -576,7 +576,7 @@ void cloud_callback(const PointCloud2::ConstPtr& input_cloud){
 
 
 int main (int argc, char **argv){
-    ros::init(argc, argv, "Groundcloud_extract");
+    ros::init(argc, argv, "Groundcloud_extract");   // 初始化节点Groundcloud_extract
     ros::NodeHandle nh_("~");
     row_offset = numRow - central_y / cell_length - 1;
     col_offset = numCol - central_x / cell_length - 1;
