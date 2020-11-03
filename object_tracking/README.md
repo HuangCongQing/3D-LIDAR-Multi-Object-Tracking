@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-10-27 10:39:37
+ * @LastEditTime: 2020-11-03 20:31:30
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: /3D-LIDAR-Multi-Object-Tracking/object_tracking/README.md
+-->
 # ROS Package for Object Detecton/Tracking
 
 ## Please notice this repository is still in progress.
@@ -73,7 +81,6 @@ rosrun object_tracking tracking input:=/kitti/velo/pointcloud
 
 ### Result
 
-[![1地面分离2020-11-03.mkv (3.11MB)](https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ)]()
 
 ![arch](./pic/result2.png)
 
