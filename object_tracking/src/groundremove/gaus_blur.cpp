@@ -4,6 +4,7 @@
 //#pragma once
 //https://gist.github.com/agrafix/56592043c43c8801f40ab7667b9e7f0e
 // modified some parts
+// 高斯模糊（英语：Gaussian Blur）
 
 
 #include <iostream>
