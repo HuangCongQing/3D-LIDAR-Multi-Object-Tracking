@@ -69,9 +69,9 @@ void getCellIndexFromPoints(float x, float y, int& chI, int& binI){
     float chP = (atan2(y, x) + M_PI) / (2 * M_PI);
     float binP = (distance - rMin) / (rMax - rMin);
     //index
-    chI = floor(chP*numChannel);
-    binI = floor(binP*numBin);
-//    cout << "bin ind: "<<binI << " ch ind: "<<chI <<endl;
+    chI = floor(chP*numChannel);   // ???
+    binI = floor(binP*numBin);     // ？？没懂
+   cout << "bin ind: "<<binI << " ch ind: "<<chI <<endl;
 }
 
 void createAndMapPolarGrid(PointCloud<PointXYZ> cloud,
@@ -82,7 +82,7 @@ void createAndMapPolarGrid(PointCloud<PointXYZ> cloud,
         float z = cloud.points[i].z;
 
         int chI, binI;
-        getCellIndexFromPoints(x, y, chI, binI);
+        getCellIndexFromPoints(x, y, chI, binI);  // 得到CellIndex  ： chI, binI
         // TODO; modify abobe function so that below code would not need
         if(chI < 0 || chI >=numChannel || binI < 0 || binI >= numBin) continue; // to prevent segentation fault
         polarData[chI][binI].updateMinZ(z);
@@ -175,7 +175,9 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
     array<array<Cell, numBin>, numChannel> polarData;
     createAndMapPolarGrid(filteredCloud, polarData);
 
-    // cout << "size: "<<groundCloud->size() << endl;
+    cout << "初始点云 size: "<<cloud->size() << endl;
+    cout << "高点 size: "<<elevatedCloud->size() << endl;
+    cout << "地面点 size: "<<groundCloud->size() << endl;
     for (int channel = 0; channel < polarData.size(); channel++){
         for (int bin = 0; bin < polarData[0].size(); bin ++){
             float zi = polarData[channel][bin].getMinZ();
