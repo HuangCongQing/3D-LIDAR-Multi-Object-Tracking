@@ -178,18 +178,18 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
     cout << "初始点云 size: "<<cloud->size() << endl;
     cout << "高点 size: "<<elevatedCloud->size() << endl;
     cout << "地面点 size: "<<groundCloud->size() << endl;
-    for (int channel = 0; channel < polarData.size(); channel++){
+    for (int channel = 0; channel < polarData.size(); channel++){   // channel: polarData的点数
         for (int bin = 0; bin < polarData[0].size(); bin ++){
             float zi = polarData[channel][bin].getMinZ();
-            if(zi > tHmin && zi < tHmax){polarData[channel][bin].updataHeight(zi);}
+            if(zi > tHmin && zi < tHmax){polarData[channel][bin].updataHeight(zi);}   //  判断什么？
             else if(zi > tHmax){polarData[channel][bin].updataHeight(hSeonsor);}
             else {polarData[channel][bin].updataHeight(tHmin);}
         }
         //could replace gauss with gradient
 //        computeGradientAdjacentCell(polarData[channel]);
-        gaussSmoothen(polarData[channel], 1, 3);
-//        std::cout << " finished smoothing at channel "<< channel << std::endl;
-        computeHDiffAdjacentCell(polarData[channel]);
+        gaussSmoothen(polarData[channel], 1, 3);  // 高斯平滑  来自 src/groundremove/gaus_blur.cpp
+       std::cout << " finished smoothing at channel "<< channel << std::endl;
+        computeHDiffAdjacentCell(polarData[channel]);    //  什么意思？？
 
         for (int bin = 0; bin < polarData[0].size(); bin ++){
             if(polarData[channel][bin].getSmoothed() < tHmax &&
