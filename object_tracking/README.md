@@ -73,6 +73,8 @@ rosrun object_tracking tracking input:=/kitti/velo/pointcloud
 
 ### Result
 
+[![1地面分离2020-11-03.mkv (3.11MB)](https://gw.alipayobjects.com/mdn/prod_resou/afts/img/A*NNs6TKOR3isAAAAAAAAAAABkARQnAQ)]()
+
 ![arch](./pic/result2.png)
 
 ######  Youtube [Clip](https://www.youtube.com/watch?v=zzFpTVk2Uj0)
