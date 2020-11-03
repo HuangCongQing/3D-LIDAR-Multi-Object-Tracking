@@ -71,7 +71,7 @@ void getCellIndexFromPoints(float x, float y, int& chI, int& binI){
     //index
     chI = floor(chP*numChannel);   // ???
     binI = floor(binP*numBin);     // ？？没懂
-   cout << "bin ind: "<<binI << " ch ind: "<<chI <<endl;
+//    cout << "bin ind: "<<binI << " ch ind: "<<chI <<endl;
 }
 
 void createAndMapPolarGrid(PointCloud<PointXYZ> cloud,
@@ -171,13 +171,13 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
 
     PointCloud<pcl::PointXYZ> filteredCloud;
 
+    cout << "进入groundRemove函数中---------------------------------------" << endl;  
+
     filterCloud(cloud, filteredCloud);  // 判断欧氏距离，过滤去除异常点  （ rMin = 3.4; rMax = 120;）
     array<array<Cell, numBin>, numChannel> polarData;
     createAndMapPolarGrid(filteredCloud, polarData);
 
-    cout << "初始点云 size: "<<cloud->size() << endl;
-    cout << "高点 size: "<<elevatedCloud->size() << endl;
-    cout << "地面点 size: "<<groundCloud->size() << endl;
+    cout << "初始点云 size: "<<cloud->size()  << " 高点 size: "<<elevatedCloud->size() << " 地面点 size: "<<groundCloud->size()<< endl;
     for (int channel = 0; channel < polarData.size(); channel++){   // channel: polarData的点数
         for (int bin = 0; bin < polarData[0].size(); bin ++){
             float zi = polarData[channel][bin].getMinZ();
@@ -232,4 +232,5 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
             elevatedCloud->push_back(o);
         }
     }
+      cout << "初始点云 size: "<<cloud->size()  << " 处理后高点 size: "<<elevatedCloud->size() << " 处理后地面点 size: "<<groundCloud->size()<< endl;
 }

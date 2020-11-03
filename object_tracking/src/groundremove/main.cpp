@@ -80,14 +80,14 @@ void filter_mid_area_limitation()
   //创建滤波器并用条件定义对象初始化
 }
 
-// cloud_cb回调函数调用
+// cloud_cb回调函数调用此函数
 void filter_mid_area(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_in)
 {
   condrem.setInputCloud(cloud_in);
   condrem.setKeepOrganized(false);
   condrem.filter(*cloud_in); // 输入输出名字一样，方便
 }
-
+//  cloud_cb--回调函数
 void cloud_cb(const sensor_msgs::PointCloud2ConstPtr &input)
 { // input--msg消息
 
@@ -132,7 +132,7 @@ void cloud_cb(const sensor_msgs::PointCloud2ConstPtr &input)
   ground_pub.publish(output);       // 发布者 output--msg消息
 
   counta++;
-  cout << "ground Frame: " << counta << "----------------------------------------" << endl;
+  cout << "ground Frame: " << counta << "----------------------------------------" << endl;  // 输出在屏幕上：第几帧
 }
 
 int main(int argc, char **argv)
