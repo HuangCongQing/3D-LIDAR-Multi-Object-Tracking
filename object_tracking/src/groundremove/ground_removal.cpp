@@ -164,7 +164,7 @@ void outlierFilter(array<array<Cell, numBin>, numChannel>& polarData){
     }
 }
 
-// 主函数  main.cpp会调用此函数
+// 主函数  src/groundremove/main.cpp会调用此函数
 void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,
               PointCloud<pcl::PointXYZ>::Ptr  elevatedCloud,
               PointCloud<pcl::PointXYZ>::Ptr  groundCloud){
