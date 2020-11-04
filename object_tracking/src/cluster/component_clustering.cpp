@@ -29,21 +29,21 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
                              array<array<int, numGrid>, numGrid> & cartesianData){
 
 
-    array<array<int, numGrid>, numGrid> gridNum{};
-    for(int cellX = 0; cellX < numGrid; cellX++){
-        for(int cellY = 0; cellY < numGrid; cellY++){
-            gridNum[cellX][cellY] = 0;
+    array<array<int, numGrid>, numGrid> gridNum{};  // ？ gridNums是指？
+    for(int cellX = 0; cellX < numGrid; cellX++){    // cellX
+        for(int cellY = 0; cellY < numGrid; cellY++){   // cellY
+            gridNum[cellX][cellY] = 0; // 全部填充为0
         }
     }
 
-    for(int i = 0; i < elevatedCloud->size(); i++){
+    for(int i = 0; i < elevatedCloud->size(); i++){  // 遍历高点
         float x = elevatedCloud->points[i].x;
         float y = elevatedCloud->points[i].y;
-        float xC = x+roiM/2;
+        float xC = x+roiM/2;   // float roiM = 50;
         float yC = y+roiM/2;
-        // exclude outside roi points
-        if(xC < 0 || xC >= roiM || yC < 0 || yC >=roiM) continue;
-        int xI = floor(numGrid*xC/roiM);
+        // exclude outside roi points  排除外部roi points
+        if(xC < 0 || xC >= roiM || yC < 0 || yC >=roiM) continue; // continue后，，下面不执行。gridNum[xI][yI] 值不变 
+        int xI = floor(numGrid*xC/roiM);   //  ?? xI .yI
         int yI = floor(numGrid*yC/roiM);
         gridNum[xI][yI] = gridNum[xI][yI] + 1;
     //    cartesianData[xI][yI] = -1;
