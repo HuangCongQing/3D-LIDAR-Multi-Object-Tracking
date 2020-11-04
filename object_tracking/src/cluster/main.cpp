@@ -224,7 +224,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
   }
 
   //line list end
-  vis_pub.publish(line_list);
+  vis_pub.publish(line_list);   //发布者  cluster_obs -- 话题topic名
   // bounding box visualizing end---------------------------------------------
 
 }
@@ -232,21 +232,21 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
 
 int main (int argc, char** argv){
   // Initialize ROS
-  ros::init (argc, argv, "cluster");
+  ros::init (argc, argv, "cluster");  // "cluster"--节点名
   ros::NodeHandle nh;
 
-  ros::Subscriber sub = nh.subscribe ("none_ground_topic", 160, cloud_cb);
+  ros::Subscriber sub = nh.subscribe ("none_ground_topic", 160, cloud_cb);  //订阅者  none_ground_topic -- 话题topic名
 
   // Create a ROS publisher for the output point cloud
-  pub = nh.advertise<sensor_msgs::PointCloud2> ("output", 1);
+  pub = nh.advertise<sensor_msgs::PointCloud2> ("output", 1);  //发布者  output -- 话题topic名
 
-  vis_pub = nh.advertise<visualization_msgs::Marker>( "visualization_marker", 0 );
-  marker_array_pub_ = nh.advertise<visualization_msgs::MarkerArray>("cluster_ma", 10);
-  g_costmap_pub = nh.advertise<nav_msgs::OccupancyGrid>("realtime_cost_map", 10);
+  vis_pub = nh.advertise<visualization_msgs::Marker>( "visualization_marker", 0 );  //发布者  visualization_marker -- 话题topic名
+  marker_array_pub_ = nh.advertise<visualization_msgs::MarkerArray>("cluster_ma", 10);   //发布者  cluster_ma -- 话题topic名
+  g_costmap_pub = nh.advertise<nav_msgs::OccupancyGrid>("realtime_cost_map", 10);    //发布者  realtime_cost_map -- 话题topic名
 
-  obs_pub = nh.advertise<object_tracking::ObstacleList>("cluster_obs",10);
+  obs_pub = nh.advertise<object_tracking::ObstacleList>("cluster_obs",10);   //发布者  cluster_obs -- 话题topic名
 
-  box_pub = nh.advertise<object_tracking::trackbox>("track_box",10);
+  box_pub = nh.advertise<object_tracking::trackbox>("track_box",10);   //发布者  track_box -- 话题topic名
 
   // Spin
   ros::spin ();
