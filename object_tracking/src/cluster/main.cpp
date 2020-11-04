@@ -67,32 +67,32 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
   // Convert from ros msg to PCL::PointCloud data type
   fromROSMsg (*input, *none_ground_cloud);  // 转为PCL数据格式PCL::PointCloud
 
-  //start processing pcl::pointcloud
+  //start processing pcl::pointcloud 开始处理 pcl::pointcloud数据
 
-  int numCluster = 0; // global variable
-  array<array<int, numGrid>, numGrid> cartesianData{};
-  componentClustering(none_ground_cloud, cartesianData, numCluster);
-  //cout << "num is "<<numCluster<<endl;
+  int numCluster = 0; // global variable  聚类数量？
+  array<array<int, numGrid>, numGrid> cartesianData{};  // 笛卡尔数据？
+  componentClustering(none_ground_cloud, cartesianData, numCluster);  // Source: /src/cluster/component_clustering.cpp
+  cout << "num is "<<numCluster<<endl; // 
   // for visualization
   PointCloud<pcl::PointXYZ>::Ptr clusteredCloud (new pcl::PointCloud<pcl::PointXYZ>);
 //  PointCloud<pcl::PointXYZRGB>::Ptr clusteredCloud (new pcl::PointCloud<pcl::PointXYZRGB>);
   
-  makeClusteredCloud(none_ground_cloud, cartesianData, clusteredCloud);
+  makeClusteredCloud(none_ground_cloud, cartesianData, clusteredCloud);  // 聚类      Source: /src/cluster/component_clustering.cpp
 
   // Convert from PCL::PointCloud to ROS data type
   clusteredCloud->header.frame_id = none_ground_cloud->header.frame_id; // add "velo_link"
   sensor_msgs::PointCloud2 output;
-  toROSMsg(*clusteredCloud, output);
+  toROSMsg(*clusteredCloud, output);  // 转为Msg
 
   static int count = 0;
-  static nav_msgs::OccupancyGrid og;
+  static nav_msgs::OccupancyGrid og;   // 
   if (!count)
-    setOccupancyGrid(&og);
+    setOccupancyGrid(&og);   // 
 
   og.header.frame_id = none_ground_cloud->header.frame_id;
 
   // create cost map with pointcloud
-  std::vector<int> cost_map = createCostMap(*none_ground_cloud);
+  std::vector<int> cost_map = createCostMap(*none_ground_cloud); //  Source: /src/cluster/component_clustering.cpp
 
   /*
   bool filter = false;
@@ -101,14 +101,14 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
   */
 
   og.data.insert(og.data.end(), cost_map.begin(), cost_map.end());
-  g_costmap_pub.publish(og);
+  g_costmap_pub.publish(og);  // 发布者
   og.data.clear();
   count++;
 
   object_tracking::ObstacleList clu_obs;
   setObsMsg(none_ground_cloud, cartesianData, clu_obs);
-  obs_pub.publish(clu_obs); 
-  pub.publish(output);
+  obs_pub.publish(clu_obs);   // 发布者
+  pub.publish(output);  // 发布者
   
   counta ++;
   cout << "cluster Frame: "<<counta << "----------------------------------------"<< endl;
@@ -158,12 +158,12 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
 
 //************************************cube visualiaztion******************************
 
-  box_pub.publish(boxArray);   // boxArray--候选框8个坐标数组 的 数组
+  box_pub.publish(boxArray);   //  发布者  boxArray--候选框8个坐标数组 的 数组
 
   // cout << "boxArray is " << boxArray<< endl;  // bBoxes
   cout << "size of bBoxes is " << bBoxes.size() << endl;  //bBoxes数量 size of bBoxes is 2
   cout << "size of marker is " << ma.markers.size() << endl; // marker数量 size of marker is 2
-  marker_array_pub_.publish(ma);
+  marker_array_pub_.publish(ma);   // 发布者
 
 
 //************************************end of cube*************************************

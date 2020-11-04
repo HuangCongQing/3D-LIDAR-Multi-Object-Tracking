@@ -24,7 +24,7 @@ double g_offset_z = -2;
  double CAR_WIDTH = 2;
 //costmap paramter
 
-
+// 
 void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
                              array<array<int, numGrid>, numGrid> & cartesianData){
 
@@ -243,15 +243,15 @@ void findComponent(array<array<int, numGrid>, numGrid> & cartesianData, int &clu
     }
 }
 
-// object_tracking/src/cluster/main.cpp会引用下面函数
+// object_tracking/src/cluster/main.cpp会引用此函数
 void componentClustering(PointCloud<pcl::PointXYZ>::Ptr elevatedCloud,
                          array<array<int, numGrid>, numGrid> & cartesianData,
                          int & numCluster){
     // map 120m radius data(polar grid data) into 100x100 cartesian grid,
     // parameter might need to be modified
     // in this case 30mx30m with 100x100x grid
-    mapCartesianGrid(elevatedCloud, cartesianData);
-    findComponent(cartesianData, numCluster);
+    mapCartesianGrid(elevatedCloud, cartesianData); // 第一步
+    findComponent(cartesianData, numCluster);  // 第二步
 }
 
 // void makeClusteredCloud(PointCloud<pcl::PointXYZ>::Ptr& elevatedCloud,
@@ -293,6 +293,7 @@ void componentClustering(PointCloud<pcl::PointXYZ>::Ptr elevatedCloud,
 //     }
 // }
 
+// object_tracking/src/cluster/main.cpp会引用此函数
 void makeClusteredCloud(PointCloud<pcl::PointXYZ>::Ptr& elevatedCloud,
                         array<array<int, numGrid>, numGrid> cartesianData,
                         PointCloud<pcl::PointXYZ>::Ptr& clusterCloud){
@@ -389,6 +390,7 @@ void setObsMsg(PointCloud<pcl::PointXYZ>::Ptr& elevatedCloud,
 //    }
 //}
 
+// object_tracking/src/cluster/main.cpp会引用此函数
 void setOccupancyGrid(nav_msgs::OccupancyGrid *og)
 {
   og->info.resolution = g_resolution;
@@ -403,6 +405,7 @@ void setOccupancyGrid(nav_msgs::OccupancyGrid *og)
   og->info.origin.orientation.w = 1.0;
 }
 
+// object_tracking/src/cluster/main.cpp会引用此函数
 std::vector<int> createCostMap(const pcl::PointCloud<pcl::PointXYZ> &scan)
 {
   std::vector<int> cost_map(g_cell_width * g_cell_height, 0);
