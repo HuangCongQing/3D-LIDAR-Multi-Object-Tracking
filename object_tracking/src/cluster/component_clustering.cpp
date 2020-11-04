@@ -243,6 +243,7 @@ void findComponent(array<array<int, numGrid>, numGrid> & cartesianData, int &clu
     }
 }
 
+// object_tracking/src/cluster/main.cpp会引用下面函数
 void componentClustering(PointCloud<pcl::PointXYZ>::Ptr elevatedCloud,
                          array<array<int, numGrid>, numGrid> & cartesianData,
                          int & numCluster){

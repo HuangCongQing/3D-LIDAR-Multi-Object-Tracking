@@ -59,12 +59,13 @@ ros::Publisher marker_array_pub_;
 
 ros::Publisher box_pub;
 
+// 回调函数
 void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
 
   PointCloud<pcl::PointXYZ>::Ptr none_ground_cloud (new pcl::PointCloud<pcl::PointXYZ> ());
 
   // Convert from ros msg to PCL::PointCloud data type
-  fromROSMsg (*input, *none_ground_cloud);
+  fromROSMsg (*input, *none_ground_cloud);  // 转为PCL数据格式PCL::PointCloud
 
   //start processing pcl::pointcloud
 
@@ -114,9 +115,9 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
 
   visualization_msgs::MarkerArray ma;
 
-  vector<PointCloud<PointXYZ>> bBoxes = boxFitting(none_ground_cloud, cartesianData, numCluster,ma);
+  vector<PointCloud<PointXYZ>> bBoxes = boxFitting(none_ground_cloud, cartesianData, numCluster,ma);  // bBoxes----一个数组(候选框8个坐标)
 
-  object_tracking::trackbox boxArray;
+  object_tracking::trackbox boxArray; // boxArray--候选框8个坐标数组 的 数组
     
   boxArray.header = input->header;
   boxArray.box_num = bBoxes.size();
@@ -157,10 +158,11 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
 
 //************************************cube visualiaztion******************************
 
-  box_pub.publish(boxArray);  
+  box_pub.publish(boxArray);   // boxArray--候选框8个坐标数组 的 数组
 
-  cout << "size of bBoxes is " << bBoxes.size() << endl;
-  cout << "size of marker is " << ma.markers.size() << endl;
+  // cout << "boxArray is " << boxArray<< endl;  // bBoxes
+  cout << "size of bBoxes is " << bBoxes.size() << endl;  //bBoxes数量 size of bBoxes is 2
+  cout << "size of marker is " << ma.markers.size() << endl; // marker数量 size of marker is 2
   marker_array_pub_.publish(ma);
 
 
@@ -171,8 +173,8 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
 
 //*********************************************bBoxes visualization***************************************
 
-  visualization_msgs::Marker line_list;
-  line_list.header.frame_id = "velodyne";
+  visualization_msgs::Marker line_list; //将候选框8个点连线
+  line_list.header.frame_id = "velodyne";   // 定义frame_id (rviz需要设置世界坐标系为velodyne)
   line_list.header.stamp = ros::Time::now();
   line_list.ns =  "boxes";
   line_list.action = visualization_msgs::Marker::ADD;
