@@ -214,6 +214,7 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
     }
 }
 
+// findComponent会引用search函数
 void search(array<array<int, numGrid>, numGrid> & cartesianData, int clusterId, int cellX, int cellY){
     cartesianData[cellX][cellY] = clusterId;
     int mean = kernelSize/2;
