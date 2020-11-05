@@ -218,7 +218,8 @@ void  cloud_cb (const object_tracking::trackbox& input){
     arrowsG.action = visualization_msgs::Marker::ADD;
     arrowsG.type =  visualization_msgs::Marker::ARROW;
     // green  设置颜色
-    arrowsG.color.g = 1.0f;
+    arrowsG.color.g = 1.0f; // 绿色
+    // arrowsG.color.r = 1.0f; // 红色
     arrowsG.color.a = 1.0;  
     arrowsG.id = i;
     geometry_msgs::Point p;
