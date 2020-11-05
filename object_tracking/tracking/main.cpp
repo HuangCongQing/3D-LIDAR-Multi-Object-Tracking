@@ -159,7 +159,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
   //end converting----------------------------------------
   PointCloud<PointXYZ> targetPoints;
   vector<vector<double>> targetVandYaw;
-  vector<int> trackManage;
+  vector<int> trackManage;  // trackManage???
   vector<bool> isStaticVec;
   vector<bool> isVisVec;
   vector<PointCloud<PointXYZ>> visBBs;
@@ -250,7 +250,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
     arrowsG.scale.y = 0.1;
     arrowsG.scale.z = 0.1;
 
-    vis_pub.publish(arrowsG);
+    vis_pub.publish(arrowsG);  // 发布箭头消息
   }
 
   
@@ -275,7 +275,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
   pointsY.scale.x =pointsG.scale.x =pointsR.scale.x = pointsB.scale.x=0.5;
   pointsY.scale.y =pointsG.scale.y =pointsR.scale.y = pointsB.scale.y = 0.5;
 
-  // yellow
+  // yellow（红绿蓝混合为黄）
   pointsY.color.r = 1.0f;
   pointsY.color.g = 1.0f;
   pointsY.color.b = 0.0f;
@@ -305,25 +305,25 @@ void  cloud_cb (const object_tracking::trackbox& input){
     p.z = -1.73/2;
 
 //   cout << "is ------------------" << i <<endl;
-    // cout << trackManage[i] << endl;
-    if(isStaticVec[i] == true){
-      pointsB.points.push_back(p); 
+    cout << "trackManage[i]  " <<trackManage[i] << endl; // 输出
+    if(isStaticVec[i] == true){   // isStaticVec???
+      pointsB.points.push_back(p);    // 蓝点
     }
-    else if(trackManage[i] < 5 ){
+    else if(trackManage[i] < 5 ){  // 小于5为黄点
       pointsY.points.push_back(p);
     }
-    else if(trackManage[i] == 5){
+    else if(trackManage[i] == 5){  // 等于5为绿点
       pointsG.points.push_back(p);
     }
     else if(trackManage[i] > 5){
-      pointsR.points.push_back(p); 
+      pointsR.points.push_back(p);    // 大于5为红点
     }
   }
-  vis_pub.publish(pointsY);
+  vis_pub.publish(pointsY);   // 发布
   // cout << "pointsG" << pointsG.points[0].x << " "<< pointsG.points[0].y << endl;
-  vis_pub.publish(pointsG);
-  vis_pub.publish(pointsR);
-  vis_pub.publish(pointsB);
+  vis_pub.publish(pointsG);  // 发布
+  vis_pub.publish(pointsR);  // 发布
+  vis_pub.publish(pointsB);  // 发布
   // tracking poiints visualizing end---------------------------------------------
 
 
@@ -404,9 +404,9 @@ void  cloud_cb2 (const nav_msgs::Odometry msg)
    yaw_gps = msg.pose.pose.orientation.z; // 偏航角
 
    v_gps = sqrt(v_x*v_x+v_y*v_y);
-  cout << "v_gps: " << v_gps <<endl;  //输出  注释
+  // cout << "v_gps: " << v_gps <<endl;  //输出  注释   v_gps: 8.03288
   
-  cout<< "yaw_gps: " << yaw_gps <<endl;   //输出  注释   v_gps: 8.03288
+  // cout<< "yaw_gps: " << yaw_gps <<endl;   //输出  注释 yaw_gps: 0
 }
 
 
