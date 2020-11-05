@@ -1,7 +1,7 @@
 <!--
  * @Author: HCQ
  * @Date: 2020-10-27 10:18:56
- * @LastEditTime: 2020-11-05 10:56:49
+ * @LastEditTime: 2020-11-05 16:42:52
  * @LastEditors: Please set LastEditors
  * @Description: 3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）
  * @FilePath: \3D-LIDAR-Multi-Object-Tracking\README.md
@@ -42,6 +42,12 @@ https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0005/2
 
 
 ### Start
+
+各模块代码路径：
+
+* [src/groundremove](object_tracking/src/groundremove)
+* [src/cluster](object_tracking/src/cluster)
+* [tracking](object_tracking/tracking)
 
 #### ~~PLEASE make sure you load the files, `src/ego_velo.txt` and `src/ego_yaw.txt` in `src/imm_ukf_jpda.cpp` l68, l69~~
 

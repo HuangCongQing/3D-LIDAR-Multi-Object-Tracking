@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-10-27 10:39:37
- * @LastEditTime: 2020-11-05 16:41:57
+ * @LastEditTime: 2020-11-05 16:43:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /3D-LIDAR-Multi-Object-Tracking/object_tracking/README.md
@@ -45,9 +45,9 @@ https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0005/2
 
 各模块代码路径：
 
-* [src/groundremove](object_tracking/src/groundremove)
-* [src/cluster](object_tracking/src/cluster)
-* [tracking](object_tracking/tracking)
+* [src/groundremove](src/groundremove)
+* [src/cluster](src/cluster)
+* [tracking](tracking)
 
 #### ~~PLEASE make sure you load the files, `src/ego_velo.txt` and `src/ego_yaw.txt` in `src/imm_ukf_jpda.cpp` l68, l69~~
 
