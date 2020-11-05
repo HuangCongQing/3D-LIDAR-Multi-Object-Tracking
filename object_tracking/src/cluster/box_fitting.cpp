@@ -408,10 +408,10 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 }
 
 
-
+//  候选框
 vector<PointCloud<PointXYZ>> boxFitting(PointCloud<PointXYZ>::Ptr elevatedCloud,
                 array<array<int, numGrid>, numGrid> cartesianData,
-                int numCluster,visualization_msgs::MarkerArray& ma){
+                int numCluster,visualization_msgs::MarkerArray& ma){  // ma数据
     vector<PointCloud<PointXYZ>>  clusteredPoints(numCluster);
     getClusteredPoints(elevatedCloud, cartesianData, clusteredPoints);
     vector<PointCloud<PointXYZ>>  bbPoints;

@@ -156,7 +156,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
     boxArray.y4.push_back(bBoxes[i][7].z);
   }
 
-//************************************cube visualiaztion******************************
+//************************************cube visualiaztion 立方体可视化******************************
 
   box_pub.publish(boxArray);   //  发布者  boxArray--候选框8个坐标数组 的 数组
 
