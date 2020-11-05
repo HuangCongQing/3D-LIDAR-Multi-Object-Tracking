@@ -1,7 +1,7 @@
 <!--
  * @Author: HCQ
  * @Date: 2020-10-27 10:18:56
- * @LastEditTime: 2020-11-05 10:54:30
+ * @LastEditTime: 2020-11-05 10:56:49
  * @LastEditors: Please set LastEditors
  * @Description: 3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）
  * @FilePath: \3D-LIDAR-Multi-Object-Tracking\README.md
@@ -58,14 +58,12 @@ rosbag play ~/data/KittiRawdata/2011_09_26_drive_0005_sync/kitti_2011_09_26_driv
 # changshu bag
 rosbag play  /home/hcq/data/changshu_bag/2018-06-04-16-46-11.bag --loop
 
-
-
 ```
 ##### Terminal 3
 ```
 rviz
 ```
-![arch](./pic/setting.png)
+![arch](object_tracking/pic/setting.png)
 
 ##### Terminal 4
 ```
@@ -82,7 +80,7 @@ rosrun object_tracking tracking input:=/kitti/velo/pointcloud
 ### Result
 
 
-![arch](./pic/result2.png)
+![arch](object_tracking//pic/result2.png)
 
 ######  Youtube [Clip](https://www.youtube.com/watch?v=zzFpTVk2Uj0)
 
