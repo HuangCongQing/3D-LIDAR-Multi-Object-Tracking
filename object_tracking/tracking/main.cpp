@@ -61,6 +61,7 @@ double yaw_gps;
 
 double v_gps;
 
+// 回调函数-- 话题 track_box
 void  cloud_cb (const object_tracking::trackbox& input){
 
 
@@ -388,7 +389,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
 }
 
 
-
+// 回调函数-- 话题 /gps/odom
 int test=0;
 void  cloud_cb2 (const nav_msgs::Odometry msg)
 {
@@ -410,7 +411,7 @@ void  cloud_cb2 (const nav_msgs::Odometry msg)
 
 int main (int argc, char** argv){
   // Initialize ROS
-  ros::init (argc, argv, "obj_track");
+  ros::init (argc, argv, "obj_track"); // obj_track--节点
   ros::NodeHandle nh;
 
   // ros::Subscriber subImu = nh.subscribe ("imu_data", 10, imu_cb);
@@ -420,8 +421,8 @@ int main (int argc, char** argv){
 
   // Create a ROS subscriber for the input point cloud
 
-  ros::Subscriber sub = nh.subscribe ("track_box", 160, cloud_cb);
-  ros::Subscriber sub2 = nh.subscribe ("/gps/odom", 1000, cloud_cb2);
+  ros::Subscriber sub = nh.subscribe ("track_box", 160, cloud_cb);   //订阅者  track_box -- 话题topic名
+  ros::Subscriber sub2 = nh.subscribe ("/gps/odom", 1000, cloud_cb2);   //订阅者  /gps/odom -- 话题topic名
 
 //   message_filters::Subscriber<sensor_msgs::PointCloud2> Velodyne_sub(nh, "/velodyne_points", 1);  
 //   message_filters::Subscriber<nav_msgs::Odometry> odom_sub(nh, "/gps_odom", 1);  
@@ -433,10 +434,10 @@ int main (int argc, char** argv){
 //   cout << "start syn1" << endl;
 
   // Create a ROS publisher for the output point cloud
-  pub = nh.advertise<sensor_msgs::PointCloud2> ("output", 1);
+  pub = nh.advertise<sensor_msgs::PointCloud2> ("output", 1);  //发布者  visualization_marker -- 话题topic名
 
-  vis_pub = nh.advertise<visualization_msgs::Marker>( "visualization_marker", 0 );
-  vis_pub2 = nh.advertise<visualization_msgs::Marker>( "visualization_marker2", 0 );
+  vis_pub = nh.advertise<visualization_msgs::Marker>( "visualization_marker", 0 );    //发布者  visualization_marker -- 话题topic名
+  vis_pub2 = nh.advertise<visualization_msgs::Marker>( "visualization_marker2", 0 );  //发布者  visualization_marker2 -- 话题topic名
 
 //  cout << "start syn3" << endl;
   // //TF Broadcasterの実体化
