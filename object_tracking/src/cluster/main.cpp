@@ -60,7 +60,7 @@ ros::Publisher marker_array_pub_;
 ros::Publisher box_pub;
 
 // 回调函数
-void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
+void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面数据
 
   PointCloud<pcl::PointXYZ>::Ptr none_ground_cloud (new pcl::PointCloud<pcl::PointXYZ> ());
 
@@ -69,10 +69,10 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
 
   //start processing pcl::pointcloud 开始处理 pcl::pointcloud数据
 
-  int numCluster = 0; // global variable  聚类数量？
+  int numCluster = 0; // global variable  聚类ID数量？
   array<array<int, numGrid>, numGrid> cartesianData{};  // 笛卡尔数据？
   componentClustering(none_ground_cloud, cartesianData, numCluster);  // Source: /src/cluster/component_clustering.cpp
-  cout << "num is "<<numCluster<<endl; // 
+  cout << "初始聚类ID数量numCluster is "<<numCluster<<endl; // 聚类的数量
   // for visualization
   PointCloud<pcl::PointXYZ>::Ptr clusteredCloud (new pcl::PointCloud<pcl::PointXYZ>);
 //  PointCloud<pcl::PointXYZRGB>::Ptr clusteredCloud (new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -87,11 +87,11 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
   static int count = 0;
   static nav_msgs::OccupancyGrid og;   // 
   if (!count)
-    setOccupancyGrid(&og);   // 
+    setOccupancyGrid(&og);   // 设置参数数值
 
   og.header.frame_id = none_ground_cloud->header.frame_id;
 
-  // create cost map with pointcloud
+  // create cost map with pointcloud    costmap代码地图 简单来说就是为了在这张地图上进行各种加工，方便我们后面进行路径规划而存在的。
   std::vector<int> cost_map = createCostMap(*none_ground_cloud); //  Source: /src/cluster/component_clustering.cpp
 
   /*
@@ -117,7 +117,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){
 
   vector<PointCloud<PointXYZ>> bBoxes = boxFitting(none_ground_cloud, cartesianData, numCluster,ma);  // bBoxes----一个数组(候选框8个坐标)
 
-  object_tracking::trackbox boxArray; // boxArray--候选框8个坐标数组 的 数组
+  object_tracking::trackbox boxArray; // boxArray--候选框8个坐标数组 的 数组  msg格式：object_tracking/msg/trackbox.msg
     
   boxArray.header = input->header;
   boxArray.box_num = bBoxes.size();
@@ -244,7 +244,7 @@ int main (int argc, char** argv){
 
   vis_pub = nh.advertise<visualization_msgs::Marker>( "visualization_marker", 0 );  //发布者  visualization_marker -- 话题topic名
   marker_array_pub_ = nh.advertise<visualization_msgs::MarkerArray>("cluster_ma", 10);   //发布者  cluster_ma -- 话题topic名
-  g_costmap_pub = nh.advertise<nav_msgs::OccupancyGrid>("realtime_cost_map", 10);    //发布者  realtime_cost_map -- 话题topic名
+  g_costmap_pub = nh.advertise<nav_msgs::OccupancyGrid>("realtime_cost_map", 10);    //全局代价地图？？ 发布者  realtime_cost_map -- 话题topic名
 
   obs_pub = nh.advertise<object_tracking::ObstacleList>("cluster_obs",10);   //发布者  cluster_obs -- 话题topic名
 
