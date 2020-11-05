@@ -71,7 +71,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
   // convert local to global-------------------------
   double timestamp = input.header.stamp.toSec();  // 报错： error: cannot convert ‘const _stamp_type {aka const ros::Time}’ to ‘double’
   vector<vector<double>> egoPoints;
-  getOriginPoints(timestamp, egoPoints,v_gps,yaw_gps);
+  getOriginPoints(timestamp, egoPoints,v_gps,yaw_gps);   // v_gps,yaw_gps都是从回调函数cloud_cb计算得来
   
   static tf::TransformBroadcaster br;
   tf::Transform transform;
@@ -217,7 +217,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
     arrowsG.ns = "arrows";
     arrowsG.action = visualization_msgs::Marker::ADD;
     arrowsG.type =  visualization_msgs::Marker::ARROW;
-    // green
+    // green  设置颜色
     arrowsG.color.g = 1.0f;
     arrowsG.color.a = 1.0;  
     arrowsG.id = i;
@@ -397,15 +397,15 @@ void  cloud_cb2 (const nav_msgs::Odometry msg)
   test++;
 //  cout<<test<<endl;
 
-  double v_x = msg.twist.twist.linear.x;
+  double v_x = msg.twist.twist.linear.x;  // 线速度
   double v_y = msg.twist.twist.linear.y;
   
-   yaw_gps = msg.pose.pose.orientation.z;
+   yaw_gps = msg.pose.pose.orientation.z; // 偏航角
 
    v_gps = sqrt(v_x*v_x+v_y*v_y);
-  // cout << v_gps <<endl;
+  cout << "v_gps: " << v_gps <<endl;  //输出  注释
   
-  // cout << yaw_gps <<endl;
+  cout<< "yaw_gps: " << yaw_gps <<endl;   //输出  注释   v_gps: 8.03288
 }
 
 
@@ -457,7 +457,7 @@ int main (int argc, char** argv){
    
   // //robot座標系の元となるロボットの位置姿勢情報格納用変数の作成
   // geometry_msgs::TransformStamped robotState;
-   
+    //输出  注释
   // //現在の時間の格納
   // robotState.header.stamp = ros::Time::now();
    
