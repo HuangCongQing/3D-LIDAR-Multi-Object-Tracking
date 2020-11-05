@@ -493,7 +493,7 @@ double getBboxArea(PointCloud<PointXYZ> bBox){
 }
 
 void updateVisBoxArea(UKF& target, VectorXd dtCP){
-    cout << "calling area update"<<endl;
+    cout << "calling area update"<<endl;   // 输出
     int lastInd = target.bb_yaw_history_.size()-1;
     // double diffYaw = target.bb_yaw_history_[lastInd] - target.bb_yaw_history_[lastInd-1];
     // cout << dtCP << endl;
@@ -605,7 +605,7 @@ void updateBB(UKF& target){
     double DiffYaw = yaw - currentYaw; 
     // double DiffYaw = currentYaw - yaw; 
     // double bestDiffYaw = target.bestYaw_ - yaw; 
-    cout << "box yaw "<< yaw<<endl;
+    cout << "box yaw "<< yaw<<endl;  // 输出
     cout << "current yaw "<< currentYaw<<endl;
     cout << "diff yaw "<< DiffYaw <<endl;
     // bestDiffYaw = -1 *bestDiffYaw;
@@ -624,7 +624,7 @@ void updateBB(UKF& target){
         updateBoxYaw(target, cp, DiffYaw, isVis);
 
         double afterYaw  = getBBoxYaw(target);
-        cout << "box yaw after "<< afterYaw<<endl;
+        cout << "box yaw after "<< afterYaw<<endl;  // 输入  水平偏航角度yaw
         // assert(abs(yaw -getBBoxYaw(target)) < 0.01 );
         target.bestYaw_  = yaw;
     }
