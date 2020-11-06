@@ -313,6 +313,9 @@ void makeClusteredCloud(PointCloud<pcl::PointXYZ>::Ptr& elevatedCloud,
         int xI = floor(numGrid*xC/roiM);  // (0~249)
         int yI = floor(numGrid*yC/roiM);  // (0~249)
 
+        // cout << "xI is "<< xI <<endl;
+        // cout << "yI is "<< yI <<endl;
+        // cout << "cartesianData is "<< cartesianData[xI][yI]<<endl;  //  各种数值
         int clusterNum = cartesianData[xI][yI]; //  数值
         if(clusterNum != 0){
             PointXYZ o;

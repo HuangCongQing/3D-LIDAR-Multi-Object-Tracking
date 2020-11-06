@@ -64,7 +64,7 @@ void getClusteredPoints(PointCloud<PointXYZ>::Ptr elevatedCloud,
             o.x = x;
             o.y = y;
             o.z = z;
-            clusteredPoints[vectorInd].push_back(o);
+            clusteredPoints[vectorInd].push_back(o);  // 填充clusteredPoints
         }
     }
 }
@@ -408,14 +408,14 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 }
 
 
-//  候选框
+//  候选框拟合处理
 vector<PointCloud<PointXYZ>> boxFitting(PointCloud<PointXYZ>::Ptr elevatedCloud,
                 array<array<int, numGrid>, numGrid> cartesianData,
                 int numCluster,visualization_msgs::MarkerArray& ma){  // ma数据
     vector<PointCloud<PointXYZ>>  clusteredPoints(numCluster);
-    getClusteredPoints(elevatedCloud, cartesianData, clusteredPoints);
+    getClusteredPoints(elevatedCloud, cartesianData, clusteredPoints);  // 聚类点
     vector<PointCloud<PointXYZ>>  bbPoints;
-    getBoundingBox(clusteredPoints, bbPoints,ma);
+    getBoundingBox(clusteredPoints, bbPoints,ma);  // 得到候选框
 
     return bbPoints;
 //    vector<vector<float>>  bBoxes(numCluster,  vector<float>(6));

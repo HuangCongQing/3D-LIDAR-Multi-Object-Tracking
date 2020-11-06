@@ -70,9 +70,10 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   //start processing pcl::pointcloud 开始处理 pcl::pointcloud数据
 
   int numCluster = 0; // global variable  聚类ID数量？
-  array<array<int, numGrid>, numGrid> cartesianData{};  // 笛卡尔数据？
+  array<array<int, numGrid>, numGrid> cartesianData{};  // 笛卡尔坐标数据，二维网格？
   componentClustering(none_ground_cloud, cartesianData, numCluster);  // Source: /src/cluster/component_clustering.cpp
   cout << "初始聚类ID数量numCluster is "<<numCluster<<endl; // 聚类的数量
+  // cout << "cartesianData is "<< cartesianData[1][2] <<endl; //二维网格？  报错
   // for visualization
   PointCloud<pcl::PointXYZ>::Ptr clusteredCloud (new pcl::PointCloud<pcl::PointXYZ>);
 //  PointCloud<pcl::PointXYZRGB>::Ptr clusteredCloud (new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -105,22 +106,23 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   og.data.clear();
   count++;
 
-  object_tracking::ObstacleList clu_obs;
+  object_tracking::ObstacleList clu_obs;     // Obstacle  障碍物
   setObsMsg(none_ground_cloud, cartesianData, clu_obs);
   obs_pub.publish(clu_obs);   // 发布者
   pub.publish(output);  // 发布者
   
   counta ++;
-  cout << "cluster Frame: "<<counta << "----------------------------------------"<< endl;
+  cout << "cluster Frame: "<<counta << "----------------------------------------"<< endl;   // 帧数
 
   visualization_msgs::MarkerArray ma;
 
-  vector<PointCloud<PointXYZ>> bBoxes = boxFitting(none_ground_cloud, cartesianData, numCluster,ma);  // bBoxes----一个数组(候选框8个坐标)
+  vector<PointCloud<PointXYZ>> bBoxes = boxFitting(none_ground_cloud, cartesianData, numCluster,ma);  // bBoxes----一个数组(候选框8个坐标)  聚类ID数量？
 
   object_tracking::trackbox boxArray; // boxArray--候选框8个坐标数组 的 数组  msg格式：object_tracking/msg/trackbox.msg
     
   boxArray.header = input->header;
   boxArray.box_num = bBoxes.size();
+  // 填充boxArray
   for(int i = 0;i < bBoxes.size();i++)
   {
     boxArray.x1.push_back(bBoxes[i][0].x);
