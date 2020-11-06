@@ -159,7 +159,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
   //end converting----------------------------------------
   PointCloud<PointXYZ> targetPoints;
   vector<vector<double>> targetVandYaw;
-  vector<int> trackManage;  // trackManage???
+  vector<int> trackManage;  // trackManage???  大量具有相关不确定性的跟踪对象需要有效地实施跟踪管理。跟踪管理的主要目的是动态限制虚假跟踪列表的数量（从而防止错误的数据关联），并在丢失检测的情况下保持对象跟踪
   vector<bool> isStaticVec;
   vector<bool> isVisVec;
   vector<PointCloud<PointXYZ>> visBBs;
@@ -305,7 +305,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
     p.z = -1.73/2;
 
 //   cout << "is ------------------" << i <<endl;
-    cout << "trackManage[i]  " <<trackManage[i] << endl; // 输出
+    // cout << "trackManage[i]  " <<trackManage[i] << endl; // 输出
     if(isStaticVec[i] == true){   // isStaticVec???
       pointsB.points.push_back(p);    // 蓝点
     }

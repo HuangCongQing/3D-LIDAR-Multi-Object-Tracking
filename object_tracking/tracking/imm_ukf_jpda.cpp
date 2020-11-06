@@ -478,6 +478,7 @@ VectorXd getCpFromBbox(PointCloud<PointXYZ> bBox){
     return cp;
 }
 
+// 得到候选框区域
 double getBboxArea(PointCloud<PointXYZ> bBox){
     PointXYZ p1 = bBox[0];
     PointXYZ p2 = bBox[1];
