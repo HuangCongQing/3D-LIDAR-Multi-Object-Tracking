@@ -114,9 +114,9 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   counta ++;
   cout << "cluster Frame: "<<counta << "----------------------------------------"<< endl;   // 帧数
 
-  visualization_msgs::MarkerArray ma;
+  visualization_msgs::MarkerArray ma;  //实体框
 
-  vector<PointCloud<PointXYZ>> bBoxes = boxFitting(none_ground_cloud, cartesianData, numCluster,ma);  // bBoxes----一个数组(候选框8个坐标)  聚类ID数量？
+  vector<PointCloud<PointXYZ>> bBoxes = boxFitting(none_ground_cloud, cartesianData, numCluster,ma);  // bBoxes----一个数组(候选框8个坐标)  初始聚类ID数量numCluster
 
   object_tracking::trackbox boxArray; // boxArray--候选框8个坐标数组 的 数组  msg格式：object_tracking/msg/trackbox.msg
     

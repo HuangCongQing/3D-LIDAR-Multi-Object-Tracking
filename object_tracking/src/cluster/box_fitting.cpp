@@ -57,14 +57,16 @@ void getClusteredPoints(PointCloud<PointXYZ>::Ptr elevatedCloud,
         int xI = floor(numGrid * xC / roiM);
         int yI = floor(numGrid * yC / roiM);
 
-        int clusterNum = cartesianData[xI][yI]; //1 ~ numCluster
+        int clusterNum = cartesianData[xI][yI]; //1 ~ numCluster   初始聚类ID数量numCluster
+        // cout << "clusterNum is " << clusterNum << endl;  // 连续几个相同的值（聚类在一块的？）
         int vectorInd = clusterNum - 1; //0 ~ (numCluster -1 )
         if (clusterNum != 0) {
             PointXYZ o;
             o.x = x;
             o.y = y;
             o.z = z;
-            clusteredPoints[vectorInd].push_back(o);  // 填充clusteredPoints
+            clusteredPoints[vectorInd].push_back(o);  // 填充clusteredPoints   PointXYZ类型数组
+            // cout << "clusteredPoints is " << clusteredPoints << endl;  //  报错？
         }
     }
 }
@@ -79,9 +81,9 @@ void getPointsInPcFrame(Point2f rectPoints[], vector<Point2f>& pcPoints, int off
         float rOffsetY = picY - offsetY;
         // reverse from image coordinate to eucledian coordinate
         float rX = rOffsetX;
-        float rY = picScale*roiM - rOffsetY;
+        float rY = picScale*roiM - rOffsetY;  //  float picScale = 900/roiM;
         // reverse to 30mx30m scale
-        float rmX = rX/picScale;
+        float rmX = rX/picScale;  //  float picScale = 900/roiM;
         float rmY = rY/picScale;
         // reverse from (0 < x,y < 30) to (-15 < x,y < 15)
         float pcX = rmX - roiM/2;
@@ -94,7 +96,7 @@ void getPointsInPcFrame(Point2f rectPoints[], vector<Point2f>& pcPoints, int off
 bool ruleBasedFilter(vector<Point2f> pcPoints, float maxZ, int numPoints){
     bool isPromising = false;
     //minnimam points thresh
-    if(numPoints < 30) return isPromising;
+    if(numPoints < 30) return isPromising;  // 小于30个点，返回false
     // length is longest side of the rectangle while width is the shorter side.
     float width, length, height, area, ratio, mass;
 
@@ -129,7 +131,7 @@ bool ruleBasedFilter(vector<Point2f> pcPoints, float maxZ, int numPoints){
     // cout<< "mass is " <<mass<<endl;
     // cout<< "ratio is " <<ratio<<endl;
 
-    //start rule based filtering
+    //start rule based filtering   // 开始 Rule-based Filter
     if(height > tHeightMin && height < tHeightMax){
         if(width > tWidthMin && width < tWidthMax){
             if(length > tLenMin && length < tLenMax){
@@ -153,6 +155,7 @@ bool ruleBasedFilter(vector<Point2f> pcPoints, float maxZ, int numPoints){
     else return isPromising;
 }
 
+// getBoundingBox引用  制作边界框
 visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_cluster) 
 { 
   Eigen::Vector4f centroid; 
@@ -203,11 +206,12 @@ visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_clu
   return marker; 
 }
 
+//  将最小面积矩形（MAR）[128]应用于每个聚类对象，从而生成一个2D框，当与保留在聚类过程中的高度信息结合后，它便成为3D边界框 
 void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
                     vector<PointCloud<PointXYZ>>& bbPoints,visualization_msgs::MarkerArray& ma){
-//     cout << "the number of cluster is "<< clusteredPoints.size() <<endl;
+    // cout << "the number of cluster is "<< clusteredPoints.size() <<endl;   // 初始聚类ID数量numCluster is 
     
-    for (int iCluster = 0; iCluster < clusteredPoints.size(); iCluster++){
+    for (int iCluster = 0; iCluster < clusteredPoints.size(); iCluster++){  //  循环的次数就是 初始聚类ID数量numCluster is 33
         Mat m (picScale*roiM, picScale*roiM, CV_8UC1, Scalar(0));
         float initPX = clusteredPoints[iCluster][0].x + roiM/2;
         float initPY = clusteredPoints[iCluster][0].y + roiM/2;
@@ -218,17 +222,18 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
         int offsetInitX = roiM*picScale/2 - initPicX;
         int offsetInitY = roiM*picScale/2 - initPicY;
 
-        int numPoints = clusteredPoints[iCluster].size();
+        int numPoints = clusteredPoints[iCluster].size();  // 比如聚类33，每一类里面有多少点 numPoints
         vector<Point> pointVec(numPoints);
-        vector<Point2f> pcPoints(4);
+        vector<Point2f> pcPoints(4);   // ???
         float minMx, minMy, maxMx, maxMy;
         float minM = 999; float maxM = -999; float maxZ = -99;
         float maxdistance=-999;
         // for center of gravity
         float sumX = 0; float sumY = 0;
 
-//        cout << "the number of cluster i is "<< numPoints <<endl;
+    //    cout << "the number of cluster i is "<< numPoints <<endl;
 
+        // 循环每一聚类里面的点
         for (int iPoint = 0; iPoint < clusteredPoints[iCluster].size(); iPoint++){
             float pX = clusteredPoints[iCluster][iPoint].x;
             float pY = clusteredPoints[iCluster][iPoint].y;
@@ -253,7 +258,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 */
           //  m.at<uchar>(offsetY, offsetX) = 255;
             pointVec[iPoint] = Point(offsetX, offsetY);
-            // calculate min and max slope
+            // calculate min and max slope 斜率
             float m = pY/pX;
             ////////////std::cout << "m:" << m << std::endl;
 
@@ -273,28 +278,29 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 
             float xydis = sqrt(pX*pX+pY*pY);
 
-            if(xydis > maxdistance)maxdistance = xydis;
+            if(xydis > maxdistance)maxdistance = xydis;    // 最大距离
 
 
             //get maxZ
-            if(pZ > maxZ) maxZ = pZ;
+            if(pZ > maxZ) maxZ = pZ;  // 最大距离
 
             sumX += offsetX;
             sumY += offsetY; 
 
         }
-        // L shape fitting parameters
+        // L shape fitting parameters ===  将最小面积矩形（MAR）[128]应用于每个聚类对象，从而生成一个2D框，
+        // 某些稀疏点（带红色圆圈）被认为是异常值，并且MAR过程导致不正确的框，使用L形拟合可解决此问题
         float xDist = maxMx - minMx;
         float yDist = maxMy - minMy;
-        float slopeDist = sqrt(xDist*xDist + yDist*yDist);
+        float slopeDist = sqrt(xDist*xDist + yDist*yDist);   // 选择两个最远的离群点x1和x2，它们位于面向LIDAR传感器的对象的相对侧。然后在两点之间绘制一条线Ldis
         /////////////////////std::cout << "boxFitting  slopeDist" << slopeDist << std::endl;
-        float slope = (maxMy - minMy)/(maxMx - minMx);
+        float slope = (maxMy - minMy)/(maxMx - minMx);   //斜率
 
         // random variable
         mt19937_64 mt(0);
         uniform_int_distribution<> randPoints(0, numPoints-1);
 
-        // start l shape fitting for car like object
+        // start l shape fitting for car like object 开始为汽车之类的物体 l shape fitting
         // lSlopeDist = 10000, lnumPoints = 30000;
         if(slopeDist > lSlopeDist && numPoints > lnumPoints && (maxMy > 8 || maxMy < -5)){
 //        if(1){
@@ -302,7 +308,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
             float maxDx, maxDy;
 
             // 80 random points, get max distance
-            for(int i = 0; i < ramPoints; i++){
+            for(int i = 0; i < ramPoints; i++){   // int ramPoints = 80;
                 int pInd = randPoints(mt);
                 assert(pInd >= 0 && pInd < clusteredPoints[iCluster].size());
                 float xI = clusteredPoints[iCluster][pInd].x;
@@ -310,7 +316,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 
                 // from equation of distance between line and point
                 float dist = abs(slope*xI-1*yI+maxMy-slope*maxMx)/sqrt(slope*slope + 1);
-                if(dist > maxDist) {
+                if(dist > maxDist) {   // 赋值最大值 maxDist
                     maxDist = dist;
                     maxDx = xI;
                     maxDy = yI;
@@ -329,7 +335,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
             float lastX = maxDx + maxMvecX + minMvecX;
             float lastY = maxDy + maxMvecY + minMvecY;
 
-            pcPoints[0] = Point2f(minMx, minMy);
+            pcPoints[0] = Point2f(minMx, minMy);  // ??pcPoints
             pcPoints[1] = Point2f(maxDx, maxDy);
             pcPoints[2] = Point2f(maxMx, maxMy);
             pcPoints[3] = Point2f(lastX, lastY);
@@ -339,9 +345,10 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
             ///////////std::cout << " pcPoints[2]  " << pcPoints[2].x << " " <<  pcPoints[2].y << std::endl;
             //////////std::cout << " pcPoints[3]  " << pcPoints[3].x << " " <<  pcPoints[3].y << std::endl;
 
-            ///////////////std::cout << "boxFitting  maxZ" << maxZ << std::endl;
-            bool isPromising = ruleBasedFilter(pcPoints, maxZ, numPoints);
-            // ///////////////////////    std::cout << "boxFitting   isPromising:" << isPromising << std::endl;
+            // std::cout << "boxFitting  maxZ " << maxZ << std::endl;   //  boxFitting  maxZ 0.525725
+            //  最后一步:消除大多数无关对象，例如墙壁，灌木丛，建筑物和树木。实现尺寸阈值化以实现此目的。
+            bool isPromising = ruleBasedFilter(pcPoints, maxZ, numPoints);    //   比如聚类33，每一类里面有多少点 numPoints
+            std::cout << "boxFitting   isPromising:" << isPromising << std::endl;
             if(!isPromising) continue;
         }
         else{
@@ -365,7 +372,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 
         }
 
-        // make pcl cloud for 3d bounding box
+        // make pcl cloud for 3d bounding box  3D边界框
         PointCloud<PointXYZ> oneBbox;
         for(int pclH = 0; pclH < 2; pclH++){
             for(int pclP = 0; pclP < 4; pclP++){
@@ -374,7 +381,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
                 o.y = pcPoints[pclP].y;
                 if(pclH == 0) o.z = -sensorHeight;
                 else o.z = maxZ;
-                oneBbox.push_back(o);
+                oneBbox.push_back(o);   // 一个边界框
             }
         }
 
@@ -394,11 +401,11 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
         ////////////////////////////////////////////////////////////////////
 
 
-        bbPoints.push_back(oneBbox);
+        bbPoints.push_back(oneBbox); // 实体边界框集合？
 //        clustered2D[iCluster] = m;
 
-        visualization_msgs::Marker mac = mark_cluster(clusteredPoints[iCluster]);
-        ma.markers.push_back(mac);
+        visualization_msgs::Marker mac = mark_cluster(clusteredPoints[iCluster]);   // 边框参数设置
+        ma.markers.push_back(mac);  // ma在这里 填充
 
     }
 
@@ -413,7 +420,7 @@ vector<PointCloud<PointXYZ>> boxFitting(PointCloud<PointXYZ>::Ptr elevatedCloud,
                 array<array<int, numGrid>, numGrid> cartesianData,
                 int numCluster,visualization_msgs::MarkerArray& ma){  // ma数据
     vector<PointCloud<PointXYZ>>  clusteredPoints(numCluster);
-    getClusteredPoints(elevatedCloud, cartesianData, clusteredPoints);  // 聚类点
+    getClusteredPoints(elevatedCloud, cartesianData, clusteredPoints);  // 指的是聚类点？具体什么意思呢？
     vector<PointCloud<PointXYZ>>  bbPoints;
     getBoundingBox(clusteredPoints, bbPoints,ma);  // 得到候选框
 
