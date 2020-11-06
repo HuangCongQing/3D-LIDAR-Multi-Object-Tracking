@@ -63,6 +63,7 @@ void filterCloud(PointCloud<PointXYZ>::Ptr cloud, PointCloud<PointXYZ> & filtere
     }
 }
 
+// 得到
 void getCellIndexFromPoints(float x, float y, int& chI, int& binI){
     float distance = sqrt(x * x + y * y);
     //normalize

@@ -36,7 +36,7 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
         }
     }
     
-    // ??
+    // ??栅格  映射点云
     for(int i = 0; i < elevatedCloud->size(); i++){  // 遍历高点数
         float x = elevatedCloud->points[i].x;
         float y = elevatedCloud->points[i].y;
@@ -217,7 +217,7 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
     }
 }
 
-// findComponent会引用search函数  
+// findComponent会引用search函数   聚类    图搜索
 void search(array<array<int, numGrid>, numGrid> & cartesianData, int clusterId, int cellX, int cellY){   //  cellX(0-249), cellY(0-249)
     cartesianData[cellX][cellY] = clusterId; // 赋值
     int mean = kernelSize/2;   // kernelSize = 3;  mean  = 1 
