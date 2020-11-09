@@ -1,7 +1,7 @@
 <!--
  * @Author: HCQ
  * @Date: 2020-10-27 10:18:56
- * @LastEditTime: 2020-11-09 12:29:07
+ * @LastEditTime: 2020-11-09 12:34:19
  * @LastEditors: Please set LastEditors
  * @Description: 3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）
  * @FilePath: \3D-LIDAR-Multi-Object-Tracking\README.md
@@ -89,7 +89,7 @@ roslaunch  object_tracking test.launch
 #  复杂
 rosrun object_tracking ground
 rosrun object_tracking cluster
-rosrun object_tracking tracking input:=/kitti/velo/pointcloud
+rosrun object_tracking tracking
 
 ```
 
