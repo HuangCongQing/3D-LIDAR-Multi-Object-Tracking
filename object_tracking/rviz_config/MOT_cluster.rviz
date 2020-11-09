@@ -8,7 +8,6 @@ Panels:
         - /Status1
         - /PointCloud22
         - /MarkerArray1
-        - /MarkerArray1/Status1
         - /Marker1
       Splitter Ratio: 0.5
     Tree Height: 707
@@ -71,7 +70,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 150
+      Max Intensity: 142
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: PointCloud2
@@ -111,7 +110,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.029999999329447746
       Style: Flat Squares
-      Topic: /aux_points
+      Topic: /none_ground_topic
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -160,7 +159,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 29.49530792236328
+      Distance: 37.98491287231445
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -175,10 +174,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4453983008861542
+      Pitch: 0.5153985619544983
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.7153980731964111
+      Yaw: 4.783581256866455
     Saved: ~
 Window Geometry:
   Displays:
