@@ -105,7 +105,7 @@ void cloud_cb(const sensor_msgs::PointCloud2ConstPtr &input)
   pcl::PassThrough<pcl::PointXYZ> pass;             //设置滤波器对象
   pass.setInputCloud(cloud);                        //设置输入点云cloud（由input转化而来）
   pass.setFilterFieldName("z");                     //设置过滤时所需要点云类型的z字段
-  pass.setFilterLimits(filter_z_min, filter_z_max); //设置在过滤字段上的范围
+  pass.setFilterLimits(filter_z_min, filter_z_max); //设置在过滤字段上的范围（-3.0~1.0）
   //pass.setFilterLimitsNegative (true);     //设置保留范围内的还是过滤掉范围内的
   pass.filter(*z_filter_cloud); //执行滤波，保存过滤结果在cloud_filtered
 
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 //订阅者 ： "velodyne_points"  "/kitti/velo/pointcloud" --话题名(可以根据不同数据集修改话题名)   cloud_cb--回调函数   
   // ros::Subscriber sub = nh.subscribe("/kitti/velo/pointcloud", 160, cloud_cb); 
   ros::Subscriber sub = nh.subscribe("velodyne_points", 160, cloud_cb); 
-  nh.param<float>("filter_z_max", filter_z_max, 1.0);                   // 参数服务器默认参数
+  nh.param<float>("filter_z_max", filter_z_max, 1.0);                   // 参数服务器默认参数（z轴上的滤波）
   nh.param<float>("filter_z_min", filter_z_min, -3.0);                  // nh.param<std::string>("default_param", default_param, "default_value");
   filter_mid_area_limitation();                                         //  //创建条件限定下的滤波器
 
