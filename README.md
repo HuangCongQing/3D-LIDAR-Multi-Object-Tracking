@@ -1,13 +1,15 @@
 <!--
  * @Author: HCQ
  * @Date: 2020-10-27 10:18:56
- * @LastEditTime: 2020-11-06 11:17:55
+ * @LastEditTime: 2020-11-09 11:20:27
  * @LastEditors: Please set LastEditors
  * @Description: 3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）
  * @FilePath: \3D-LIDAR-Multi-Object-Tracking\README.md
 -->
 # 3D-LIDAR-Multi-Object-Tracking
 3D-MOT(多目标检测和追踪)  （2020 · 秋）
+
+参考：https://github.com/k0suke-murakami/object_tracking
 
 @[双愚](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking) , 若fork或star请注明来源
 
