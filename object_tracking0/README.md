@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-11-09 11:16:21
- * @LastEditTime: 2020-11-09 11:24:08
+ * @LastEditTime: 2020-11-09 12:24:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /3D-LIDAR-Multi-Object-Tracking/object_tracking0/README.md
@@ -50,7 +50,7 @@ roscore
 
 ##### Terminal 2
 ```
-rosbag play kitti_2011_09_26_drive_0005_synced.bag
+rosbag play ~/data/KittiRawdata/2011_09_26_drive_0005_sync/kitti_2011_09_26_drive_0005_synced.bag --loop
 ```
 ##### Terminal 3
 ```

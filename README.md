@@ -1,7 +1,7 @@
 <!--
  * @Author: HCQ
  * @Date: 2020-10-27 10:18:56
- * @LastEditTime: 2020-11-09 11:20:27
+ * @LastEditTime: 2020-11-09 12:24:20
  * @LastEditors: Please set LastEditors
  * @Description: 3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）
  * @FilePath: \3D-LIDAR-Multi-Object-Tracking\README.md
@@ -69,7 +69,7 @@ roscore
 rosbag play ~/data/KittiRawdata/2011_09_26_drive_0005_sync/kitti_2011_09_26_drive_0005_synced.bag --loop
 
 # changshu bag
-rosbag play  /home/hcq/data/changshu_bag/2018-06-04-16-46-11.bag --loop
+rosbag play  ~/data/changshu_bag/2018-06-04-16-46-11.bag --loop
 
 ```
 ##### Terminal 3
