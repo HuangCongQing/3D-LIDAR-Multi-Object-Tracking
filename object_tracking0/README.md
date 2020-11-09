@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-11-09 11:16:21
- * @LastEditTime: 2020-11-09 12:24:45
+ * @LastEditTime: 2020-11-09 12:28:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /3D-LIDAR-Multi-Object-Tracking/object_tracking0/README.md
@@ -50,6 +50,9 @@ roscore
 
 ##### Terminal 2
 ```
+rosbag play ~/data/KittiRawdata/2011_09_26_drive_0005_sync/kitti_2011_09_26_drive_0005_synced.bag 
+
+# 下面`--loop`循环paly不推荐加，tracking和上一帧有关，误差越来越大
 rosbag play ~/data/KittiRawdata/2011_09_26_drive_0005_sync/kitti_2011_09_26_drive_0005_synced.bag --loop
 ```
 ##### Terminal 3

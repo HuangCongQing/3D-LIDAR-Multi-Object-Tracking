@@ -1,7 +1,7 @@
 <!--
  * @Author: HCQ
  * @Date: 2020-10-27 10:18:56
- * @LastEditTime: 2020-11-09 12:24:20
+ * @LastEditTime: 2020-11-09 12:29:07
  * @LastEditors: Please set LastEditors
  * @Description: 3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）
  * @FilePath: \3D-LIDAR-Multi-Object-Tracking\README.md
@@ -64,6 +64,9 @@ roscore
 ```
 
 ##### Terminal 2
+
+`--loop`循环paly不推荐加，tracking和上一帧有关，误差越来越大
+
 ```
 # kitti官方
 rosbag play ~/data/KittiRawdata/2011_09_26_drive_0005_sync/kitti_2011_09_26_drive_0005_synced.bag --loop
