@@ -137,7 +137,7 @@ void applyMedianFilter(array<array<Cell, numBin>, numChannel>& polarData){
                     sort(sur.begin(), sur.end()); // 从小到大排序
                     float m1 = sur[1]; float m2 = sur[2];// 取中间2个值
                     float median = (m1+m2)/2;  // 取中值
-                    polarData[channel][bin].updataHeight(median);  // 缺失单元的高度值将替换为相邻单元的中值
+                    polarData[channel][bin].updataHeight(median);  //高度取中值  缺失单元的高度值将替换为相邻单元的中值
                     polarData[channel][bin].updateGround();  // 是地面
                 }
             }
@@ -191,9 +191,9 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
     for (int channel = 0; channel < polarData.size(); channel++){   // channel: 80
         for (int bin = 0; bin < polarData[0].size(); bin ++){   //  120
             float zi = polarData[channel][bin].getMinZ();  // 得到最小值
-            if(zi > tHmin && zi < tHmax){polarData[channel][bin].updataHeight(zi);}   // 每个Cell栅格都有一个updataHeight
-            else if(zi > tHmax){polarData[channel][bin].updataHeight(hSeonsor);}  // float hSeonsor = 2;
-            else {polarData[channel][bin].updataHeight(tHmin);} //  float tHmin = -2.0;  // 高度
+            if(zi > tHmin && zi < tHmax){polarData[channel][bin].updataHeight(zi);}   // 每个Cell栅格都有一个updataHeight  
+            else if(zi > tHmax){polarData[channel][bin].updataHeight(hSeonsor);}  // float hSeonsor = 2;  高度     大于-0.4 ，设置为2
+            else {polarData[channel][bin].updataHeight(tHmin);} //  float tHmin = -2.0;  // 高度  小于-2，设置为-2
         }
         // could replace gauss with gradient
         //  computeGradientAdjacentCell(polarData[channel]);
@@ -234,13 +234,15 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
         
         if (polarData[chI][binI].isThisGround()) {
             float hGround = polarData[chI][binI].getHGround();
-            if (z < (hGround + 0.25)) {
-                groundCloud->push_back(o);
+            std::cout << " hGround "<< hGround << std::endl;  // 输出 大多数都是-2
+            std::cout << " z "<< z << std::endl;  // 输出 大多数都是-2
+            if (z < (hGround + 0.25)) {  // 判断hGround   z=（-3.0~1.0）
+                groundCloud->push_back(o);  // 
             } else {
                 elevatedCloud->push_back(o);
             }
         } else {
-            elevatedCloud->push_back(o);
+            elevatedCloud->push_back(o); // 高点
         }
     }
       cout << "初始点云 size: "<<cloud->size()  << " 处理后高点 size: "<<elevatedCloud->size() << " 处理后地面点 size: "<<groundCloud->size()<< endl;

@@ -6,7 +6,7 @@ private:
     float smoothed;
     float height;  // 高度
     float hDiff;  //高度差
-    float hGround;
+    float hGround;  // 
     float minZ;
     float maxZ;
     float innerDiff;
@@ -25,12 +25,12 @@ public:
     void updataHeight(float h) {height = h;}
     void updateSmoothed(float s) {smoothed = s;} //
     void updateHDiff(float hd){hDiff = hd;} //  赋值hDiff
-    void updateGround(){isGround = true; hGround = height;}
+    void updateGround(){isGround = true; hGround = height;}  // 是地面点
     void updateNeighbor(){isNeighbor = true;}
     void updateInnerDiff(float diff) { innerDiff = diff;}
     void updateCover(){isCover = true;}
 
-    bool isThisGround(){return isGround;}
+    bool isThisGround(){return isGround;}  //判断Ground
     bool isThisCover(){return isCover;}
     bool isThisNeighbor(){return isNeighbor;}
     float getMinZ() {return minZ;}
