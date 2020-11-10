@@ -21,10 +21,10 @@ using namespace pcl;
 //int numChannel = 80;
 //int numBin = 120;
 //const int numMedianKernel = 1;
-float rMin = 3.4;
+float rMin = 3.4;  // 见论文图
 float rMax = 120;
 //const float tHmin = -2.15;
- float tHmin = -2.0;
+ float tHmin = -2.0;  // 高度
 //float tHmin = -1.9;
  float tHmax = -0.4;
 //float tHmax = -1.0;
@@ -42,7 +42,7 @@ void Cell::updateMinZ(float z) {
 }
 
 
-
+// 过滤车周围半径距离（（ rMin = 3.4; rMax = 120;））
 void filterCloud(PointCloud<PointXYZ>::Ptr cloud, PointCloud<PointXYZ> & filteredCloud){
     for (int i = 0; i < cloud->size(); i++) {
         float x = cloud->points[i].x;
@@ -63,18 +63,19 @@ void filterCloud(PointCloud<PointXYZ>::Ptr cloud, PointCloud<PointXYZ> & filtere
     }
 }
 
-// 得到
+// 
 void getCellIndexFromPoints(float x, float y, int& chI, int& binI){
-    float distance = sqrt(x * x + y * y);
-    //normalize
-    float chP = (atan2(y, x) + M_PI) / (2 * M_PI);
-    float binP = (distance - rMin) / (rMax - rMin);
+    float distance = sqrt(x * x + y * y);  // 欧氏距离
+    //normalize(极坐标)
+    float chP = (atan2(y, x) + M_PI) / (2 * M_PI);   // 范围（0，1）atan2(y, x)是4象限反正切     M_PI==3.14
+    float binP = (distance - rMin) / (rMax - rMin); //范围（0，1）  rMax - rMin ~~ (3.4, 120)  见figure4-4
     //index
-    chI = floor(chP*numChannel);   // ???
-    binI = floor(binP*numBin);     // ？？没懂
+    chI = floor(chP*numChannel);   // numChannel = 80（角度分为80份）
+    binI = floor(binP*numBin);     // 没懂   numBin = 120（半径分为120份）
 //    cout << "bin ind: "<<binI << " ch ind: "<<chI <<endl;
 }
 
+// 创造映射极坐标网格
 void createAndMapPolarGrid(PointCloud<PointXYZ> cloud,
                            array<array<Cell, numBin>, numChannel>& polarData ){
     for (int i = 0; i < cloud.size(); i++) {
@@ -83,10 +84,10 @@ void createAndMapPolarGrid(PointCloud<PointXYZ> cloud,
         float z = cloud.points[i].z;
 
         int chI, binI;
-        getCellIndexFromPoints(x, y, chI, binI);  // 得到CellIndex  ： chI, binI
+        getCellIndexFromPoints(x, y, chI, binI);  // 得到CellIndex  ： chI, binI（极坐标：角度和半径）
         // TODO; modify abobe function so that below code would not need
         if(chI < 0 || chI >=numChannel || binI < 0 || binI >= numBin) continue; // to prevent segentation fault
-        polarData[chI][binI].updateMinZ(z);
+        polarData[chI][binI].updateMinZ(z);  // 存入polarData
     }
 }
 
@@ -174,11 +175,10 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
 
     cout << "进入groundRemove函数中---------------------------------------" << endl;  
 
-    filterCloud(cloud, filteredCloud);  // 判断欧氏距离，过滤去除异常点  （ rMin = 3.4; rMax = 120;）
-    array<array<Cell, numBin>, numChannel> polarData;
-    createAndMapPolarGrid(filteredCloud, polarData);
+    filterCloud(cloud, filteredCloud);  // 判断欧氏距离，过滤去除车周围半径外异常点  （ rMin = 3.4; rMax = 120;）
+    array<array<Cell, numBin>, numChannel> polarData;  // 数组定义polarData[numChannel][numBin]  ,Cell是个class
+    createAndMapPolarGrid(filteredCloud, polarData);   // 极坐标网格映射
 
-    cout << "初始点云 size: "<<cloud->size()  << " 高点 size: "<<elevatedCloud->size() << " 地面点 size: "<<groundCloud->size()<< endl;
     for (int channel = 0; channel < polarData.size(); channel++){   // channel: polarData的点数
         for (int bin = 0; bin < polarData[0].size(); bin ++){
             float zi = polarData[channel][bin].getMinZ();
@@ -189,7 +189,7 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
         //could replace gauss with gradient
 //        computeGradientAdjacentCell(polarData[channel]);
         gaussSmoothen(polarData[channel], 1, 3);  // 高斯平滑  来自 src/groundremove/gaus_blur.cpp
-       std::cout << " finished smoothing at channel "<< channel << std::endl;
+       std::cout << " finished smoothing at channel "<< channel << std::endl;  // 输出
         computeHDiffAdjacentCell(polarData[channel]);    //  什么意思？？
 
         for (int bin = 0; bin < polarData[0].size(); bin ++){

@@ -20,7 +20,7 @@ public:
     int size;
     int exce_size;
     bool car;
-    void updateMinZ(float z){if (z < minZ) minZ = z;}
+    void updateMinZ(float z){if (z < minZ) minZ = z;}  // 得到z值点的最小值
     void updateMaxZ(float z){if (z > maxZ) maxZ = z;}
     void updataHeight(float h) {height = h;}
     void updateSmoothed(float s) {smoothed = s;}
