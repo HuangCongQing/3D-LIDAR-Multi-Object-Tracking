@@ -63,7 +63,7 @@ void filterCloud(PointCloud<PointXYZ>::Ptr cloud, PointCloud<PointXYZ> & filtere
     }
 }
 
-// 
+// xy坐标，转换为 chP binP坐标
 void getCellIndexFromPoints(float x, float y, int& chI, int& binI){
     float distance = sqrt(x * x + y * y);  // 欧氏距离
     //normalize(极坐标)
@@ -71,11 +71,11 @@ void getCellIndexFromPoints(float x, float y, int& chI, int& binI){
     float binP = (distance - rMin) / (rMax - rMin); //范围（0，1）  rMax - rMin ~~ (3.4, 120)  见figure4-4
     //index
     chI = floor(chP*numChannel);   // numChannel = 80（角度分为80份）
-    binI = floor(binP*numBin);     // 没懂   numBin = 120（半径分为120份）
+    binI = floor(binP*numBin);     //    numBin = 120（半径分为120份）
 //    cout << "bin ind: "<<binI << " ch ind: "<<chI <<endl;
 }
 
-// 创造映射极坐标网格
+// 创造映射极坐标网格（未赋值）
 void createAndMapPolarGrid(PointCloud<PointXYZ> cloud,
                            array<array<Cell, numBin>, numChannel>& polarData ){
     for (int i = 0; i < cloud.size(); i++) {
@@ -84,20 +84,21 @@ void createAndMapPolarGrid(PointCloud<PointXYZ> cloud,
         float z = cloud.points[i].z;
 
         int chI, binI;
-        getCellIndexFromPoints(x, y, chI, binI);  // 得到CellIndex  ： chI, binI（极坐标：角度和半径）
+        getCellIndexFromPoints(x, y, chI, binI);  //  xy坐标得到对应栅格坐标 得到CellIndex  ： chI, binI（极坐标：角度和半径）
         // TODO; modify abobe function so that below code would not need
-        if(chI < 0 || chI >=numChannel || binI < 0 || binI >= numBin) continue; // to prevent segentation fault
-        polarData[chI][binI].updateMinZ(z);  // 存入polarData
+        if(chI < 0 || chI >=numChannel || binI < 0 || binI >= numBin) continue; // to prevent segentation fault 
+        polarData[chI][binI].updateMinZ(z);  // {if (z < minZ) minZ = z;}  // 更新得到z值点的最小值，最终得到最小值
     }
 }
 
 // update HDiff with larger value
 void computeHDiffAdjacentCell(array<Cell, numBin>& channelData){
-    for(int i = 0; i < channelData.size(); i++){
+    //    std::cout << " channelData.size()   "<< channelData.size() << std::endl;  // 输出120
+    for(int i = 0; i < channelData.size(); i++){   // 120
         // edge case
         if(i == 0){
-            float hD = channelData[i].getHeight() - channelData[i+1].getHeight();
-            channelData[i].updateHDiff(hD);
+            float hD = channelData[i].getHeight() - channelData[i+1].getHeight(); // 差值
+            channelData[i].updateHDiff(hD); // 每个栅格高度差
         }
         else if(i == channelData.size()-1){
             float hD = channelData[i].getHeight() - channelData[i-1].getHeight();
@@ -111,50 +112,56 @@ void computeHDiffAdjacentCell(array<Cell, numBin>& channelData){
             else channelData[i].updateHDiff(postHD);
         }
 
-//        cout <<channelData[i].getHeight() <<" " <<channelData[i].getHDiff() << endl;
+       cout <<channelData[i].getHeight() <<" " <<channelData[i].getHDiff() << endl; // 2, 0...
     }
 }
 
+ // 中值滤波处理缺失的地面信息（由于遮挡而常见），顾名思义，缺失单元的高度值将替换为相邻单元的中值。
 void applyMedianFilter(array<array<Cell, numBin>, numChannel>& polarData){
     // maybe later: consider edge case
     for(int channel = 1; channel < polarData.size()-1; channel++){
         for(int bin = 1; bin < polarData[0].size()-1; bin++){
-            if(!polarData[channel][bin].isThisGround()){
+            if(!polarData[channel][bin].isThisGround()){  // 判断不是地面
                 // target cell is non-ground AND surrounded by ground cells
-                if(polarData[channel][bin+1].isThisGround()&&
+                if(polarData[channel][bin+1].isThisGround()&&  // 四周是地面
                    polarData[channel][bin-1].isThisGround()&&
                    polarData[channel+1][bin].isThisGround()&&
-                   polarData[channel-1][bin].isThisGround()){
-                    vector<float> sur{polarData[channel][bin+1].getHeight(),
+                   polarData[channel-1][bin].isThisGround())
+                   {
+                    vector<float> sur{
+                                      polarData[channel][bin+1].getHeight(),   // target cell is non-ground AND surrounded by ground cells
                                       polarData[channel][bin-1].getHeight(),
                                       polarData[channel+1][bin].getHeight(),
-                                      polarData[channel-1][bin].getHeight()};
-                    sort(sur.begin(), sur.end());
-                    float m1 = sur[1]; float m2 = sur[2];
-                    float median = (m1+m2)/2;
-                    polarData[channel][bin].updataHeight(median);
-                    polarData[channel][bin].updateGround();
+                                      polarData[channel-1][bin].getHeight()
+                                      };
+                    sort(sur.begin(), sur.end()); // 从小到大排序
+                    float m1 = sur[1]; float m2 = sur[2];// 取中间2个值
+                    float median = (m1+m2)/2;  // 取中值
+                    polarData[channel][bin].updataHeight(median);  // 缺失单元的高度值将替换为相邻单元的中值
+                    polarData[channel][bin].updateGround();  // 是地面
                 }
             }
         }
     }
 }
 
+ // smoothen spot with outlier  用离群值平滑点?
 void outlierFilter(array<array<Cell, numBin>, numChannel>& polarData){
     for(int channel = 1; channel < polarData.size() - 1; channel++) {
         for (int bin = 1; bin < polarData[0].size() - 2; bin++) {
-            if(polarData[channel][bin].isThisGround()&&
+            if(polarData[channel][bin].isThisGround()&&  // 都是Ground
                polarData[channel][bin+1].isThisGround()&&
                polarData[channel][bin-1].isThisGround()&&
-               polarData[channel][bin+2].isThisGround()){
+               polarData[channel][bin+2].isThisGround())
+            {
                 float height1 = polarData[channel][bin-1].getHeight();
-                float height2 = polarData[channel][bin].getHeight();
+                float height2 = polarData[channel][bin].getHeight();  // height2本尊
                 float height3 = polarData[channel][bin+1].getHeight();
                 float height4 = polarData[channel][bin+2].getHeight();
-                if(height1 != tHmin && height2 == tHmin && height3 != tHmin){
-                    float newH = (height1 + height3)/2;
-                    polarData[channel][bin].updataHeight(newH);
-                    polarData[channel][bin].updateGround();
+                if(height1 != tHmin && height2 == tHmin && height3 != tHmin){ // float tHmin = -2.0;  // 高度
+                    float newH = (height1 + height3)/2; //取两边均值
+                    polarData[channel][bin].updataHeight(newH);  // 更新高度值
+                    polarData[channel][bin].updateGround(); //     void updateGround(){isGround = true; hGround = height;}
                 }
                 else if(height1 != tHmin && height2 == tHmin && height3 == tHmin && height4 != tHmin){
                     float newH = (height1 + height4)/2;
@@ -179,23 +186,26 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
     array<array<Cell, numBin>, numChannel> polarData;  // 数组定义polarData[numChannel][numBin]  ,Cell是个class
     createAndMapPolarGrid(filteredCloud, polarData);   // 极坐标网格映射
 
-    for (int channel = 0; channel < polarData.size(); channel++){   // channel: polarData的点数
-        for (int bin = 0; bin < polarData[0].size(); bin ++){
-            float zi = polarData[channel][bin].getMinZ();
-            if(zi > tHmin && zi < tHmax){polarData[channel][bin].updataHeight(zi);}   //  判断什么？
-            else if(zi > tHmax){polarData[channel][bin].updataHeight(hSeonsor);}
-            else {polarData[channel][bin].updataHeight(tHmin);}
+    //  polarData.size()  80   channel
+    //  polarData[0].size()  120  bin
+    for (int channel = 0; channel < polarData.size(); channel++){   // channel: 80
+        for (int bin = 0; bin < polarData[0].size(); bin ++){   //  120
+            float zi = polarData[channel][bin].getMinZ();  // 得到最小值
+            if(zi > tHmin && zi < tHmax){polarData[channel][bin].updataHeight(zi);}   // 每个Cell栅格都有一个updataHeight
+            else if(zi > tHmax){polarData[channel][bin].updataHeight(hSeonsor);}  // float hSeonsor = 2;
+            else {polarData[channel][bin].updataHeight(tHmin);} //  float tHmin = -2.0;  // 高度
         }
-        //could replace gauss with gradient
-//        computeGradientAdjacentCell(polarData[channel]);
+        // could replace gauss with gradient
+        //  computeGradientAdjacentCell(polarData[channel]);
         gaussSmoothen(polarData[channel], 1, 3);  // 高斯平滑  来自 src/groundremove/gaus_blur.cpp
-       std::cout << " finished smoothing at channel "<< channel << std::endl;  // 输出
-        computeHDiffAdjacentCell(polarData[channel]);    //  什么意思？？
+    //    std::cout << " finished smoothing at channel "<< channel << std::endl;  // 输出
+        computeHDiffAdjacentCell(polarData[channel]);    // 还在大的for循环中
 
+        // 判断是否ground
         for (int bin = 0; bin < polarData[0].size(); bin ++){
-            if(polarData[channel][bin].getSmoothed() < tHmax &&
-                    polarData[channel][bin].getHDiff() < tHDiff){
-                polarData[channel][bin].updateGround();
+            if(polarData[channel][bin].getSmoothed() < tHmax &&  // float tHmin = -2.0;
+                    polarData[channel][bin].getHDiff() < tHDiff){   //  tHDiff = 0.4; 地面应该是相对平滑的
+                polarData[channel][bin].updateGround();  // void updateGround(){isGround = true; hGround = height;}
             }
             else if(polarData[channel][bin].getHeight() < tHmax &&
                     polarData[channel][bin].getHDiff() < tHDiff){
@@ -203,9 +213,9 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
             }
         }
     }
-    // implement MedianFilter
+    // implement MedianFilter 中值滤波处理缺失的地面信息（由于遮挡而常见），顾名思义，缺失单元的高度值将替换为相邻单元的中值
     applyMedianFilter(polarData);
-    // smoothen spot with outlier
+    // smoothen spot with outlier  用离群值平滑点?
     outlierFilter(polarData);
 
     for(int i = 0; i < filteredCloud.size(); i++) {

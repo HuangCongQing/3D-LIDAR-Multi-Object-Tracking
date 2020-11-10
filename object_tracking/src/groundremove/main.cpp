@@ -116,7 +116,7 @@ void cloud_cb(const sensor_msgs::PointCloud2ConstPtr &input)
   ros_cloud.header = input->header;
   auxpoint_pub.publish(ros_cloud); //  发布者  ros_cloud--msg消息
 
-  //地面去除
+  //地面去除，分出地面点和非地面点
   groundRemove(z_filter_cloud, elevatedCloud, groundCloud); // src/groundremove/ground_removal.cpp
 
   // Convert from PCL::PointCloud to ROS data type

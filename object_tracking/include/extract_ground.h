@@ -4,13 +4,13 @@
 class Cell{
 private:
     float smoothed;
-    float height;
-    float hDiff;
+    float height;  // 高度
+    float hDiff;  //高度差
     float hGround;
     float minZ;
     float maxZ;
     float innerDiff;
-    bool isGround;
+    bool isGround; // 是不是Ground
     bool isCover;
     bool isNeighbor;
 
@@ -23,8 +23,8 @@ public:
     void updateMinZ(float z){if (z < minZ) minZ = z;}  // 得到z值点的最小值
     void updateMaxZ(float z){if (z > maxZ) maxZ = z;}
     void updataHeight(float h) {height = h;}
-    void updateSmoothed(float s) {smoothed = s;}
-    void updateHDiff(float hd){hDiff = hd;}
+    void updateSmoothed(float s) {smoothed = s;} //
+    void updateHDiff(float hd){hDiff = hd;} //  赋值hDiff
     void updateGround(){isGround = true; hGround = height;}
     void updateNeighbor(){isNeighbor = true;}
     void updateInnerDiff(float diff) { innerDiff = diff;}
@@ -35,10 +35,10 @@ public:
     bool isThisNeighbor(){return isNeighbor;}
     float getMinZ() {return minZ;}
     float getMaxZ() {return maxZ;}
-    float getHeight(){return height;}
+    float getHeight(){return height;}   // height
     float getHDiff(){ return hDiff;}
     float getInnerDiff() {return innerDiff;}
-    float getSmoothed() {return smoothed;}
+    float getSmoothed() {return smoothed;}  // 平滑
     float getHGround() {return hGround;}
     
 };

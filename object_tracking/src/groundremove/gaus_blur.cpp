@@ -28,7 +28,7 @@ std::vector<double> gaussKernel(int samples, double sigma) {
     double mean = samples/2;
     double sum = 0.0; // For accumulating the kernel values
     for (int x = 0; x < samples; ++x) {
-        kernel[x] = exp( -0.5 * (pow((x-mean)/sigma, 2.0)))/(2 * M_PI * sigma * sigma);
+        kernel[x] = exp( -0.5 * (pow((x-mean)/sigma, 2.0)))/(2 * M_PI * sigma * sigma);  // 高斯核
         // Accumulate the kernel values
         sum += kernel[x];
     }
@@ -48,9 +48,10 @@ std::vector<double> gaussKernel(int samples, double sigma) {
     return kernel;
 }
 
+// 高斯平滑
 void gaussSmoothen(std::array<Cell, numBin>& values, double sigma, int samples) {
     auto kernel = gaussKernel(samples, sigma);
-    int sampleSide = samples / 2;
+    int sampleSide = samples / 2;   // 1
     unsigned long ubound = values.size();
     // applying gaussian kernel with zero padding
     for (long i = 0; i < ubound; i++) {
