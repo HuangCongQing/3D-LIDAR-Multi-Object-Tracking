@@ -234,8 +234,8 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
         
         if (polarData[chI][binI].isThisGround()) {
             float hGround = polarData[chI][binI].getHGround();
-            std::cout << " hGround "<< hGround << std::endl;  // 输出 大多数都是-2
-            std::cout << " z "<< z << std::endl;  // 输出 大多数都是-2
+            // std::cout << " hGround "<< hGround << std::endl;  // 输出 大多数都是-2
+            // std::cout << " z "<< z << std::endl;  // 
             if (z < (hGround + 0.25)) {  // 判断hGround   z=（-3.0~1.0）
                 groundCloud->push_back(o);  // 
             } else {
