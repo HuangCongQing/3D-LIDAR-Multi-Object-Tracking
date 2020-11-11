@@ -8,7 +8,7 @@ using namespace std;
 using namespace pcl;
 
 //int numGrid = 2;
-float roiM = 50;   // ???
+float roiM = 50;   // 限制周围距离25m
 int kernelSize = 3;
 
 // 下面什么参数？
@@ -29,24 +29,25 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
                              array<array<int, numGrid>, numGrid> & cartesianData){
 
 
-    array<array<int, numGrid>, numGrid> gridNum{};  //  gridNums是指：  elevatedCloud点的XY平面离散为m×n单元的网格（见paper图）
+    array<array<int, numGrid>, numGrid> gridNum{};  //  gridNum 此数组专门统计落在每个grid的点云数， gridNums[250][250]是指：  elevatedCloud点的XY平面离散为m×n单元的网格（见paper图 Figure4-5）
     for(int cellX = 0; cellX < numGrid; cellX++){    // cellX
         for(int cellY = 0; cellY < numGrid; cellY++){   // cellY
-            gridNum[cellX][cellY] = 0; // 全部填充为0
+            gridNum[cellX][cellY] = 0; // 全部填充初始化为0
         }
     }
     
-    // ??栅格  映射点云
+    // elevatedCloud 映射到笛卡尔坐标系 //并 统计落在这个grid的有多少个点！！！
     for(int i = 0; i < elevatedCloud->size(); i++){  // 遍历高点数
-        float x = elevatedCloud->points[i].x;
+        float x = elevatedCloud->points[i].x;   // x(-15, -5),y(-50, 50)
         float y = elevatedCloud->points[i].y;
-        float xC = x+roiM/2;   // float roiM = 50;
-        float yC = y+roiM/2;
-        // exclude outside roi points  排除外部roi points
-        if(xC < 0 || xC >= roiM || yC < 0 || yC >=roiM) continue; // continue后，，下面不执行。gridNum[xI][yI] 值不变 
-        int xI = floor(numGrid*xC/roiM);   //  ?? xI .yI    const int numGrid = 250;    floor(x)返回的是小于或等于x的最大整数
-        int yI = floor(numGrid*yC/roiM);   // 归一化到250x250？？
-        gridNum[xI][yI] = gridNum[xI][yI] + 1;  // 自+1？？=1
+        float xC = x+roiM/2;   // float roiM = 50;(0~50)
+        float yC = y+roiM/2; // (0~50)
+        // exclude outside roi points  排除外部roi points  x,y属于(-25, 25)下面才继续执行
+        if(xC < 0 || xC >= roiM || yC < 0 || yC >=roiM) continue; // continue后，下面不执行。gridNum[xI][yI] 值不变 限制范围（0，50）
+        int xI = floor(numGrid*xC/roiM);   //  xI .yI    const int numGrid = 250;    floor(x)返回的是小于或等于x的最大整数
+        int yI = floor(numGrid*yC/roiM);   // 50x50 映射到→250x250
+        gridNum[xI][yI] = gridNum[xI][yI] + 1;  // 统计落在这个grid的有多少个点！！！
+        //   cout << "gridNum[xI][yI]: " << gridNum[xI][yI] << "----------------------------------------" << endl;  // gridNum[xI][yI]
     //    cartesianData[xI][yI] = -1;
 
         // if(xI == 0)
@@ -132,9 +133,9 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
 // 对m×n网格中的每个x，y重复此过程，直到为所有非空群集分配了ID。
     for(int xI = 0; xI < numGrid; xI++){  //   const int numGrid = 250; 
         for(int yI = 0; yI < numGrid; yI++){
-            if(gridNum[xI][yI] > 1){
+            if(gridNum[xI][yI] > 1){  // 一个点的直接舍弃？
                 cartesianData[xI][yI] = -1;   // 网格分配有2种初始状态，分别为空（0），已占用（-1）和已分配。随后，将x，y位置的单个单元格选作中心单元格，并且clusterID计数器加1
-
+                //下面为设置当前点的周围点数值为-1
                 if(xI == 0)
                 {
                     if(yI == 0)
@@ -151,9 +152,9 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
                         cartesianData[xI+1][yI] = -1;
                         cartesianData[xI+1][yI+1] = -1;
                     }
-                    else if(yI == numGrid - 1)
+                    else if(yI == numGrid - 1)  // 角相邻的3个相邻像元
                     {
-                        cartesianData[xI][yI-1] = -1;
+                        cartesianData[xI][yI-1] = -1; 
                         cartesianData[xI+1][yI-1] = -1;
                         cartesianData[xI+1][yI] = -1;    
                     }
@@ -219,9 +220,9 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
 
 // findComponent会引用search函数   聚类    图搜索
 void search(array<array<int, numGrid>, numGrid> & cartesianData, int clusterId, int cellX, int cellY){   //  cellX(0-249), cellY(0-249)
-    cartesianData[cellX][cellY] = clusterId; // 赋值
+    cartesianData[cellX][cellY] = clusterId; // 赋值，将周边邻居值赋值同样的clusterId
     int mean = kernelSize/2;   // kernelSize = 3;  mean  = 1 
-    for (int kX = 0; kX < kernelSize; kX++){   // kernelSize = 3;
+    for (int kX = 0; kX < kernelSize; kX++){   // kernelSize = 3;循环3次
         int kXI = kX-mean; //    0， -1 ， 1 //   cout << "kXI  is "<<kXI<<endl; 
         if((cellX + kXI) < 0 || (cellX + kXI) >= numGrid) continue;   // numGrid = 250;
         for( int kY = 0; kY < kernelSize;kY++){
