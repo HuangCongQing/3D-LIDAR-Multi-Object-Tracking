@@ -252,9 +252,9 @@ void findComponent(array<array<int, numGrid>, numGrid> & cartesianData, int &clu
 void componentClustering(PointCloud<pcl::PointXYZ>::Ptr elevatedCloud,
                          array<array<int, numGrid>, numGrid> & cartesianData,
                          int & numCluster){
-    // map 120m radius data(polar grid data) into 100x100 cartesian grid,
-    // parameter might need to be modified
-    // in this case 30mx30m with 100x100x grid
+    // map 120m radius data(polar grid data) into 100x100 cartesian grid, parameter might need to be modified
+    // 将120m半径数据（极坐标数据）映射到100x100笛卡尔网格中，可能需要修改参数
+    // in this case 30mx30m with 100x100x grid  在这种情况下，30mx30m带有100x100x网格
     mapCartesianGrid(elevatedCloud, cartesianData); // 第一步设置网格Grid状态   网格数组：cartesianData
     findComponent(cartesianData, numCluster);  // 第二步
 }
