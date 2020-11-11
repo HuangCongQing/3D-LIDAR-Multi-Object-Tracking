@@ -348,7 +348,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
             // std::cout << "boxFitting  maxZ " << maxZ << std::endl;   //  boxFitting  maxZ 0.525725
             //  最后一步:消除大多数无关对象，例如墙壁，灌木丛，建筑物和树木。实现尺寸阈值化以实现此目的。
             bool isPromising = ruleBasedFilter(pcPoints, maxZ, numPoints);    //   比如聚类33，每一类里面有多少点 numPoints
-            std::cout << "boxFitting   isPromising:" << isPromising << std::endl;
+            // std::cout << "boxFitting   isPromising:" << isPromising << std::endl; // 1, 0
             if(!isPromising) continue;
         }
         else{

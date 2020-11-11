@@ -86,8 +86,8 @@ void createAndMapPolarGrid(PointCloud<PointXYZ> cloud,
         int chI, binI;
         getCellIndexFromPoints(x, y, chI, binI);  //  xy坐标得到对应栅格坐标 得到CellIndex  ： chI, binI（极坐标：角度和半径）
         // TODO; modify abobe function so that below code would not need
-        if(chI < 0 || chI >=numChannel || binI < 0 || binI >= numBin) continue; // to prevent segentation fault 
-        polarData[chI][binI].updateMinZ(z);  // {if (z < minZ) minZ = z;}  // 更新得到z值点的最小值，最终得到最小值
+        if(chI < 0 || chI >=numChannel || binI < 0 || binI >= numBin) continue; // to prevent segentation fault 去除不合理点
+        polarData[chI][binI].updateMinZ(z);  // {if (z < minZ) minZ = z;}  // 更新得到z值点的最小值，最终得到最小值 ？？好几个点都在一个栅格，这些点只更新了updateMinZ ,点的其他信息不存储？
     }
 }
 
@@ -236,7 +236,7 @@ void groundRemove(PointCloud<pcl::PointXYZ>::Ptr   cloud,  // 初始点云
             float hGround = polarData[chI][binI].getHGround();
             // std::cout << " hGround "<< hGround << std::endl;  // 输出 大多数都是-2
             // std::cout << " z "<< z << std::endl;  // 
-            if (z < (hGround + 0.25)) {  // 判断hGround   z=（-3.0~1.0）
+            if (z < (hGround + 0.25)) {  // 判断hGround   getHGround()）最终的判断重点就是getHeight 高度值
                 groundCloud->push_back(o);  // 
             } else {
                 elevatedCloud->push_back(o);
