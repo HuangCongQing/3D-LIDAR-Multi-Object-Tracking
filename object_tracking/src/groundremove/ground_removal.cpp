@@ -112,7 +112,7 @@ void computeHDiffAdjacentCell(array<Cell, numBin>& channelData){
             else channelData[i].updateHDiff(postHD);
         }
 
-       cout <<channelData[i].getHeight() <<" " <<channelData[i].getHDiff() << endl; // 2, 0...
+    //    cout <<channelData[i].getHeight() <<" " <<channelData[i].getHDiff() << endl; // 2, 0...
     }
 }
 
