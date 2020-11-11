@@ -47,7 +47,7 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
         int xI = floor(numGrid*xC/roiM);   //  xI .yI    const int numGrid = 250;    floor(x)返回的是小于或等于x的最大整数
         int yI = floor(numGrid*yC/roiM);   // 50x50 映射到→250x250
         gridNum[xI][yI] = gridNum[xI][yI] + 1;  // 统计落在这个grid的有多少个点！！！
-        //   cout << "gridNum[xI][yI]: " << gridNum[xI][yI] << "----------------------------------------" << endl;  // gridNum[xI][yI]
+        //   cout << "gridNum[xI][yI]: " << gridNum[xI][yI] << "-------------统计落在这个grid的有多少个点！！！------------" << endl;  // gridNum[xI][yI]
     //    cartesianData[xI][yI] = -1;
 
         // if(xI == 0)
@@ -214,8 +214,14 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
                 }
 
             }
+           
+            
         }
     }
+    // for(int xI = 0; xI < numGrid; xI++){  //   const int numGrid = 250; 
+    //     for(int yI = 0; yI < numGrid; yI++){
+    //          cout << " cartesianData[xI][yI] is "<< xI<<"   " << yI  <<"   " <<  cartesianData[xI][yI]<< "========设置为-1========" <<endl;  
+    //     }}
 }
 
 // findComponent会引用search函数   聚类    图搜索
@@ -241,8 +247,9 @@ void search(array<array<int, numGrid>, numGrid> & cartesianData, int clusterId, 
 void findComponent(array<array<int, numGrid>, numGrid> & cartesianData, int &clusterId){
     for(int cellX = 0; cellX < numGrid; cellX++){  // 循环每个点   numGrid = 250;
         for(int cellY = 0; cellY < numGrid; cellY++){
+            //   cout << "cartesianData[cellX][cellY]  is "<< cellX<<"   " << cellY  <<"   "  <<  cartesianData[cellX][cellY]  <<endl;   // 大多数是0??为什么
             if(cartesianData[cellX][cellY] == -1){   // 随后，将x，y位置的单个单元格选作中心单元格，并且clusterID计数器加1   (网格分配有2种初始状态，分别为空（0），已占用（-1）)
-                clusterId ++;    // 对m×n网格中的每个x，y重复此过程，直到为所有非空cluster分配了ID。
+                clusterId ++;    // 对m×n网格中的每个x，y重复此过程，直到为所有非空cluster分配了ID。  // cout << "clusterId is "<< clusterId <<endl;  //  特别少？？？
                 search(cartesianData, clusterId, cellX, cellY);  // 对每一个点进行搜索  cellX(0-249), cellY(0-249)
             }
         }
