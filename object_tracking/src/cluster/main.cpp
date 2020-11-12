@@ -228,7 +228,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   }
 
   //line list end
-  vis_pub.publish(line_list);   //发布者  cluster_obs -- 话题topic名
+  vis_pub.publish(line_list);   //发布者  cluster_obs -- 对应话题名topic  visualization_marker
   // bounding box visualizing end---------------------------------------------
 
 }

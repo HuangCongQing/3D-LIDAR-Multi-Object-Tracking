@@ -157,7 +157,7 @@ bool ruleBasedFilter(vector<Point2f> pcPoints, float maxZ, int numPoints){
     else return isPromising;
 }
 
-// getBoundingBox引用  制作边界框
+// getBoundingBox引用  制作实体框
 visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_cluster) 
 { 
   Eigen::Vector4f centroid; 
@@ -199,13 +199,13 @@ visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_clu
     marker.scale.z=0.1; 
     
 //  marker.color.r = r; 
-  marker.color.g = 1.0f; 
+  marker.color.g = 1.0f;  // 绿色框
 //  marker.color.b = b; 
   marker.color.a = 1.0; 
 
   marker.lifetime = ros::Duration(1); 
 //   marker.lifetime = ros::Duration(0.5); 
-  return marker; 
+  return marker;   // 
 }
 
 //  将最小面积矩形（MAR）[128]应用于每个聚类对象，从而生成一个2D框，当与保留在聚类过程中的高度信息结合后，它便成为3D边界框 
@@ -233,7 +233,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
         // for center of gravity重力
         float sumX = 0; float sumY = 0;
 
-    //    cout << "the number of cluster i is "<< numPoints <<endl;
+        //  cout << "the number of cluster i is "<< numPoints <<endl;
 
         // 循环每一聚类里面的点
         for (int iPoint = 0; iPoint < clusteredPoints[iCluster].size(); iPoint++){
@@ -382,11 +382,11 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
                 PointXYZ o;
                 o.x = pcPoints[pclP].x;
                 o.y = pcPoints[pclP].y;
-                if(pclH == 0) o.z = -sensorHeight;  // -2
-                else o.z = maxZ;
+                if(pclH == 0) o.z = -sensorHeight;  // -2  下面四个点坐标为-2
+                else o.z = maxZ;  // 上面四个点z坐标
                 oneBbox.push_back(o);   // 一个边界框
             }
-        }
+        }  //  3D边界框填充循环结束
 
         ////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////
@@ -404,16 +404,16 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
         ////////////////////////////////////////////////////////////////////
 
 
-        bbPoints.push_back(oneBbox); // 实体边界框集合？
+        bbPoints.push_back(oneBbox); // 实体边界框集合
 //        clustered2D[iCluster] = m;
 
-        visualization_msgs::Marker mac = mark_cluster(clusteredPoints[iCluster]);   // 边框参数设置
-        ma.markers.push_back(mac);  // ma在这里 填充
+        visualization_msgs::Marker mac = mark_cluster(clusteredPoints[iCluster]);   // 边框参数设置(还在for循环里面哈)
+        ma.markers.push_back(mac);  // ma在这里 填充  实体框
 
     }
 
     
-///////////////std::cout << "boxFitting   bbPoints:" << bbPoints.size() << std::endl;
+    // std::cout << "boxFitting   bbPoints:" << bbPoints.size() << " 多少个边界框" << std::endl;
 
 }
 
@@ -428,7 +428,7 @@ vector<PointCloud<PointXYZ>> boxFitting(PointCloud<PointXYZ>::Ptr elevatedCloud,
     vector<PointCloud<PointXYZ>>  bbPoints;
     getBoundingBox(clusteredPoints, bbPoints,ma);  // 得到候选框
 
-    return bbPoints;
+    return bbPoints;  //返回
 //    vector<vector<float>>  bBoxes(numCluster,  vector<float>(6));
 //
 //    return bBoxes;
