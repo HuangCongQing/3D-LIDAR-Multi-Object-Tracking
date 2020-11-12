@@ -224,7 +224,7 @@ void mapCartesianGrid(PointCloud<PointXYZ>::Ptr elevatedCloud,
     //     }}
 }
 
-// findComponent会引用search函数   聚类    图搜索
+// findComponent会引用search函数   聚类    图搜索  这是什么聚类方法？？？
 void search(array<array<int, numGrid>, numGrid> & cartesianData, int clusterId, int cellX, int cellY){   //  cellX(0-249), cellY(0-249)
     cartesianData[cellX][cellY] = clusterId; // 赋值，将周边邻居值赋值同样的clusterId
     int mean = kernelSize/2;   // kernelSize = 3;  mean  = 1 
@@ -249,7 +249,7 @@ void findComponent(array<array<int, numGrid>, numGrid> & cartesianData, int &clu
         for(int cellY = 0; cellY < numGrid; cellY++){
             //   cout << "cartesianData[cellX][cellY]  is "<< cellX<<"   " << cellY  <<"   "  <<  cartesianData[cellX][cellY]  <<endl;   // 大多数是0??为什么
             if(cartesianData[cellX][cellY] == -1){   // 随后，将x，y位置的单个单元格选作中心单元格，并且clusterID计数器加1   (网格分配有2种初始状态，分别为空（0），已占用（-1）)
-                clusterId ++;    // 对m×n网格中的每个x，y重复此过程，直到为所有非空cluster分配了ID。  // cout << "clusterId is "<< clusterId <<endl;  //  特别少？？？
+                clusterId ++;    // 对m×n网格中的每个x，y重复此过程，直到为所有非空cluster分配了ID。  // cout << "clusterId is "<< clusterId <<endl;  //  特别少 初始聚类数量
                 search(cartesianData, clusterId, cellX, cellY);  // 对每一个点进行搜索  cellX(0-249), cellY(0-249)
             }
         }
