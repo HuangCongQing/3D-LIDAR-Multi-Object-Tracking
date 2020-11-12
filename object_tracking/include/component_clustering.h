@@ -12,7 +12,7 @@ using namespace pcl;
 
 const int numGrid = 250;
 
-const float grid_size = 0.2;
+const float grid_size = 0.2;     // 
 
 extern float roiM;
 extern int kernelSize;

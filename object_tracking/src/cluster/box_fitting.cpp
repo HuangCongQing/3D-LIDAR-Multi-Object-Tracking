@@ -418,7 +418,8 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 //  候选框拟合处理
 vector<PointCloud<PointXYZ>> boxFitting(PointCloud<PointXYZ>::Ptr elevatedCloud,
                 array<array<int, numGrid>, numGrid> cartesianData,
-                int numCluster,visualization_msgs::MarkerArray& ma){  // ma数据
+                int numCluster,visualization_msgs::MarkerArray& ma)  // ma数据
+{
     vector<PointCloud<PointXYZ>>  clusteredPoints(numCluster);
     getClusteredPoints(elevatedCloud, cartesianData, clusteredPoints);  // 指的是聚类点？具体什么意思呢？
     vector<PointCloud<PointXYZ>>  bbPoints;

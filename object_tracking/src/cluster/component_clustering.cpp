@@ -323,14 +323,14 @@ void makeClusteredCloud(PointCloud<pcl::PointXYZ>::Ptr& elevatedCloud,
 
         // cout << "xI is "<< xI <<endl;
         // cout << "yI is "<< yI <<endl;
-        // cout << "cartesianData is "<< cartesianData[xI][yI]<<endl;  //  各种数值
-        int clusterNum = cartesianData[xI][yI]; //  数值
+        // cout << "cartesianData is "<< cartesianData[xI][yI]<<endl;  //  (1,2,3,4,...,numCluster)
+        int clusterNum = cartesianData[xI][yI]; //  数值  每一点云点对应的栅格聚类数字标签
         if(clusterNum != 0){
             PointXYZ o;
-            o.x = grid_size*xI - roiM/2 + grid_size/2;  // 网格大小？？const float grid_size = 0.2;
-            o.y = grid_size*yI - roiM/2 + grid_size/2;
-            o.z = -1;
-            // o.r = (500*clusterNum)%255;
+            o.x = grid_size*xI - roiM/2 + grid_size/2;  // 网格大小？？ roiM = 50  grid_size = (0.200000003F)
+            o.y = grid_size*yI - roiM/2 + grid_size/2; // 转换成（-25  ~  25）范围
+            o.z = -1;  // 高度统一设置为-1
+            // o.r = (500*clusterNum)%255;   // 不同类不同颜色   error: ‘struct pcl::PointXYZ’ has no member named ‘r’，用pcl::PointXYZRGBA？
             // o.g = (100*clusterNum)%255;
             // o.b = (150*clusterNum)%255;
             clusterCloud->push_back(o); // 
