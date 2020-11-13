@@ -164,20 +164,20 @@ visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_clu
   Eigen::Vector4f min; 
   Eigen::Vector4f max; 
   
-  pcl::compute3DCentroid (cloud_cluster, centroid); 
-  pcl::getMinMax3D (cloud_cluster, min, max); 
+  pcl::compute3DCentroid (cloud_cluster, centroid);  // 坐标 centroid- 重心
+  pcl::getMinMax3D (cloud_cluster, min, max);  // 最大最小值?
   
-  uint32_t shape = visualization_msgs::Marker::CUBE; 
+  uint32_t shape = visualization_msgs::Marker::CUBE;  //定义立方体
   visualization_msgs::Marker marker; 
-  marker.header.frame_id = "/velodyne"; 
+  marker.header.frame_id = "/velodyne";  //frame_id
   marker.header.stamp = ros::Time::now(); 
   
-  marker.ns = "cube"; 
+  marker.ns = "cube";  // 简单命名
   marker.id = 0; 
-  marker.type = shape; 
+  marker.type = shape;  // 立方体
   marker.action = visualization_msgs::Marker::ADD; 
   
-  marker.pose.position.x = centroid[0]; 
+  marker.pose.position.x = centroid[0];  // 
   marker.pose.position.y = centroid[1]; 
   marker.pose.position.z = centroid[2]; 
   marker.pose.orientation.x = 0.0; 
@@ -185,11 +185,11 @@ visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_clu
   marker.pose.orientation.z = 0.0; 
   marker.pose.orientation.w = 1.0; 
   
-  marker.scale.x = (max[0]-min[0]); 
+  marker.scale.x = (max[0]-min[0]);  // 对应x,y,x坐标
   marker.scale.y = (max[1]-min[1]); 
   marker.scale.z = (max[2]-min[2]); 
   
-  if (marker.scale.x ==0) 
+  if (marker.scale.x ==0)   // 判断
       marker.scale.x=0.1; 
 
   if (marker.scale.y ==0) 

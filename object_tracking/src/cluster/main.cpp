@@ -116,7 +116,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
 
   visualization_msgs::MarkerArray ma;  //实体框
 
-  vector<PointCloud<PointXYZ>> bBoxes = boxFitting(none_ground_cloud, cartesianData, numCluster,ma);  // bBoxes----一个数组(候选框8个坐标)  初始聚类ID数量numCluster
+  vector<PointCloud<PointXYZ>> bBoxes = boxFitting(none_ground_cloud, cartesianData, numCluster,ma);  // bBoxes---- 实体边界框集合 多少个边界框  初始聚类ID数量numCluster
 
   object_tracking::trackbox boxArray; // boxArray--候选框8个坐标数组 的 数组  msg格式：object_tracking/msg/trackbox.msg
     
@@ -163,7 +163,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   box_pub.publish(boxArray);   //  发布者  boxArray--候选框8个坐标数组 的 数组
 
   // cout << "boxArray is " << boxArray<< endl;  // bBoxes
-  cout << "size of bBoxes is " << bBoxes.size() << endl;  //bBoxes数量 size of bBoxes is 2
+  cout << "size of bBoxes is " << bBoxes.size() << endl;  //bBoxes边界框的数量 size of bBoxes is 2
   cout << "size of marker is " << ma.markers.size() << endl; // marker数量 size of marker is 2
   marker_array_pub_.publish(ma);   // 发布者
 
@@ -182,27 +182,27 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   line_list.action = visualization_msgs::Marker::ADD;
   line_list.pose.orientation.w = 1.0;
   line_list.id = 0;
-  line_list.type = visualization_msgs::Marker::LINE_LIST;
+  line_list.type = visualization_msgs::Marker::LINE_LIST; //线条序列
 
-  //LINE_LIST markers use only the x component of scale, for the line width
+  //LINE_LIST markers use only the x component of scale, for the line width  仅将比例的x分量用于线宽
   line_list.scale.x = 0.1;
   // Points are green
   line_list.color.g = 1.0f;
   line_list.color.a = 1.0;
 
   int id = 0;string ids;
-  for(int objectI = 0; objectI < bBoxes.size(); objectI ++){
-    for(int pointI = 0; pointI < 4; pointI++){
+  for(int objectI = 0; objectI < bBoxes.size(); objectI ++){  // 多少个边界框,循环几次
+    for(int pointI = 0; pointI < 4; pointI++){ //内循环4次??
       assert((pointI+1)%4 < bBoxes[objectI].size());
       assert((pointI+4) < bBoxes[objectI].size());
       assert((pointI+1)%4+4 < bBoxes[objectI].size());
       id ++; ids = to_string(id);
-      geometry_msgs::Point p;
+      geometry_msgs::Point p;  // 定义p
       p.x = bBoxes[objectI][pointI].x;
       p.y = bBoxes[objectI][pointI].y;
       p.z = bBoxes[objectI][pointI].z;
-      line_list.points.push_back(p);
-      p.x = bBoxes[objectI][(pointI+1)%4].x;
+      line_list.points.push_back(p);  // 给line_lists添加点!!!!
+      p.x = bBoxes[objectI][(pointI+1)%4].x;  // 取余4
       p.y = bBoxes[objectI][(pointI+1)%4].y;
       p.z = bBoxes[objectI][(pointI+1)%4].z;
       line_list.points.push_back(p);
@@ -211,7 +211,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
       p.y = bBoxes[objectI][pointI].y;
       p.z = bBoxes[objectI][pointI].z;
       line_list.points.push_back(p);
-      p.x = bBoxes[objectI][pointI+4].x;
+      p.x = bBoxes[objectI][pointI+4].x;// 加4?
       p.y = bBoxes[objectI][pointI+4].y;
       p.z = bBoxes[objectI][pointI+4].z;
       line_list.points.push_back(p);
