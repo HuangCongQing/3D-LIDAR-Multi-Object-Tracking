@@ -165,7 +165,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   // cout << "boxArray is " << boxArray<< endl;  // bBoxes
   cout << "size of bBoxes is " << bBoxes.size() << endl;  //bBoxes边界框的数量 size of bBoxes is 2
   cout << "size of marker is " << ma.markers.size() << endl; // marker数量 size of marker is 2
-  marker_array_pub_.publish(ma);   // 发布者
+  marker_array_pub_.publish(ma);   // 发布者  实体框
 
 
 //************************************end of cube*************************************
@@ -182,12 +182,12 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   line_list.action = visualization_msgs::Marker::ADD;
   line_list.pose.orientation.w = 1.0;
   line_list.id = 0;
-  line_list.type = visualization_msgs::Marker::LINE_LIST; //线条序列
+  line_list.type = visualization_msgs::Marker::LINE_LIST; //线条序列  type设置类型
 
   //LINE_LIST markers use only the x component of scale, for the line width  仅将比例的x分量用于线宽
   line_list.scale.x = 0.1;
   // Points are green
-  line_list.color.g = 1.0f;
+  line_list.color.g = 1.0f;   // 边框绿色
   line_list.color.a = 1.0;
 
   int id = 0;string ids;
@@ -228,7 +228,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   }
 
   //line list end
-  vis_pub.publish(line_list);   //发布者  cluster_obs -- 对应话题名topic  visualization_marker
+  vis_pub.publish(line_list);   //发布者  cluster_obs -- 对应话题名topic  visualization_marker  候选框
   // bounding box visualizing end---------------------------------------------
 
 }
@@ -244,8 +244,8 @@ int main (int argc, char** argv){
   // Create a ROS publisher for the output point cloud
   pub = nh.advertise<sensor_msgs::PointCloud2> ("output", 1);  //发布者  output -- 话题topic名
 
-  vis_pub = nh.advertise<visualization_msgs::Marker>( "visualization_marker", 0 );  //发布者  visualization_marker -- 话题topic名
-  marker_array_pub_ = nh.advertise<visualization_msgs::MarkerArray>("cluster_ma", 10);   //发布者  cluster_ma -- 话题topic名
+  vis_pub = nh.advertise<visualization_msgs::Marker>( "visualization_marker", 0 );  //发布者  visualization_marker -- 话题topic名  候选框
+  marker_array_pub_ = nh.advertise<visualization_msgs::MarkerArray>("cluster_ma", 10);   //发布者  cluster_ma -- 话题topic名  实体框
   g_costmap_pub = nh.advertise<nav_msgs::OccupancyGrid>("realtime_cost_map", 10);    //全局代价地图？？ 发布者  realtime_cost_map -- 话题topic名
 
   obs_pub = nh.advertise<object_tracking::ObstacleList>("cluster_obs",10);   //发布者  cluster_obs -- 话题topic名

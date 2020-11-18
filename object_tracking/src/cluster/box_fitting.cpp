@@ -167,8 +167,8 @@ visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_clu
   pcl::compute3DCentroid (cloud_cluster, centroid);  // 坐标 centroid- 重心
   pcl::getMinMax3D (cloud_cluster, min, max);  // 最大最小值?
   
-  uint32_t shape = visualization_msgs::Marker::CUBE;  //定义立方体
-  visualization_msgs::Marker marker; 
+  uint32_t shape = visualization_msgs::Marker::CUBE;  //定义立方体 ！！！！
+  visualization_msgs::Marker marker;    // 定义marker
   marker.header.frame_id = "/velo_link";  //frame_id
   marker.header.stamp = ros::Time::now(); 
   
@@ -198,14 +198,14 @@ visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_clu
   if (marker.scale.z ==0) 
     marker.scale.z=0.1; 
     
-//  marker.color.r = r; 
-  marker.color.g = 1.0f;  // 绿色框
+ marker.color.r = 1.0f;  // 红色实体
+//   marker.color.g = 1.0f;  // 绿色
 //  marker.color.b = b; 
   marker.color.a = 1.0; 
 
   marker.lifetime = ros::Duration(1); 
 //   marker.lifetime = ros::Duration(0.5); 
-  return marker;   // 
+  return marker;   // 返回marker
 }
 
 //  将最小面积矩形（MAR）[128]应用于每个聚类对象，从而生成一个2D框，当与保留在聚类过程中的高度信息结合后，它便成为3D边界框 
@@ -407,7 +407,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
         bbPoints.push_back(oneBbox); // 实体边界框集合
 //        clustered2D[iCluster] = m;
 
-        visualization_msgs::Marker mac = mark_cluster(clusteredPoints[iCluster]);   // 边框参数设置(还在for循环里面哈)
+        visualization_msgs::Marker mac = mark_cluster(clusteredPoints[iCluster]);   // 边框参数设置(还在for循环里面哈)   返回marker
         ma.markers.push_back(mac);  // ma在这里 填充  实体框
 
     }
