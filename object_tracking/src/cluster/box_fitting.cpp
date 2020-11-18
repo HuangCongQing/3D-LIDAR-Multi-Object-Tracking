@@ -157,15 +157,15 @@ bool ruleBasedFilter(vector<Point2f> pcPoints, float maxZ, int numPoints){
     else return isPromising;
 }
 
-// getBoundingBox引用  制作实体框
+// getBoundingBox引用  制作实体框====================输入为clusteredPoints[iCluster]：每个聚类的所有三维点坐标
 visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_cluster) 
 { 
   Eigen::Vector4f centroid; 
   Eigen::Vector4f min; 
   Eigen::Vector4f max; 
   
-  pcl::compute3DCentroid (cloud_cluster, centroid);  // 坐标 centroid- 重心
-  pcl::getMinMax3D (cloud_cluster, min, max);  // 最大最小值?
+  pcl::compute3DCentroid (cloud_cluster, centroid);  // 坐标 centroid- 重心   / /计算点云中心
+  pcl::getMinMax3D (cloud_cluster, min, max);  // 得到它x,y,z三个轴上的最大值和最小值
   
   uint32_t shape = visualization_msgs::Marker::CUBE;  //定义立方体 ！！！！
   visualization_msgs::Marker marker;    // 定义marker
@@ -177,19 +177,19 @@ visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_clu
   marker.type = shape;  // 立方体
   marker.action = visualization_msgs::Marker::ADD; 
   
-  marker.pose.position.x = centroid[0];  // 
+  marker.pose.position.x = centroid[0];  // 计算点云中心
   marker.pose.position.y = centroid[1]; 
   marker.pose.position.z = centroid[2]; 
   marker.pose.orientation.x = 0.0; 
   marker.pose.orientation.y = 0.0; 
   marker.pose.orientation.z = 0.0; 
-  marker.pose.orientation.w = 1.0; 
+  marker.pose.orientation.w = 1.0;   // ?
   
-  marker.scale.x = (max[0]-min[0]);  // 对应x,y,x坐标
-  marker.scale.y = (max[1]-min[1]); 
-  marker.scale.z = (max[2]-min[2]); 
+  marker.scale.x = (max[0]-min[0]);  // x长度
+  marker.scale.y = (max[1]-min[1]);  // y长度
+  marker.scale.z = (max[2]-min[2]);  // z长度
   
-  if (marker.scale.x ==0)   // 判断
+  if (marker.scale.x ==0)   // 判断至少长宽高为0.1
       marker.scale.x=0.1; 
 
   if (marker.scale.y ==0) 
@@ -306,7 +306,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
         // start l shape fitting for car like object 开始为汽车之类的物体 l shape fitting
         // lSlopeDist = 10000, lnumPoints = 30000;
         if(slopeDist > lSlopeDist && numPoints > lnumPoints && (maxMy > 8 || maxMy < -5)){ // int lSlopeDist = 1.0;  int lnumPoints = 5;判断框的大小以及框内的点数
-//        if(1){
+        // if(1){
             float maxDist = 0;
             float maxDx, maxDy;
 
@@ -405,16 +405,12 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 
 
         bbPoints.push_back(oneBbox); // 实体边界框集合
-//        clustered2D[iCluster] = m;
-
+        // clustered2D[iCluster] = m;
         visualization_msgs::Marker mac = mark_cluster(clusteredPoints[iCluster]);   // 边框参数设置(还在for循环里面哈)   返回marker
         ma.markers.push_back(mac);  // ma在这里 填充  实体框
 
-    }
-
-    
+    }  // 循环截止     循环的次数就是 初始聚类ID数量numCluster
     // std::cout << "boxFitting   bbPoints:" << bbPoints.size() << " 多少个边界框" << std::endl;
-
 }
 
 
@@ -424,7 +420,7 @@ vector<PointCloud<PointXYZ>> boxFitting(PointCloud<PointXYZ>::Ptr elevatedCloud,
                 int numCluster,visualization_msgs::MarkerArray& ma)  // ma数据
 {
     vector<PointCloud<PointXYZ>>  clusteredPoints(numCluster);
-    getClusteredPoints(elevatedCloud, cartesianData, clusteredPoints);  // 指的是聚类点？具体什么意思呢？
+    getClusteredPoints(elevatedCloud, cartesianData, clusteredPoints);  // clusteredPoints：[聚类label数字][每个聚类的点坐标]
     vector<PointCloud<PointXYZ>>  bbPoints;
     getBoundingBox(clusteredPoints, bbPoints,ma);  // 得到候选框
 
