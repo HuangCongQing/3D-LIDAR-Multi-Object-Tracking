@@ -80,13 +80,13 @@ void  cloud_cb (const object_tracking::trackbox& input){
   ros::Time input_time = input.header.stamp;
   q.setRPY(0, 0, egoPoints[0][2]);
   transform.setRotation(q);
-  br.sendTransform(tf::StampedTransform(transform, input_time, "velodyne", "global"));
+  br.sendTransform(tf::StampedTransform(transform, input_time, "velo_link", "global"));
 //  br.sendTransform(tf::StampedTransform(transform, input_time, "velo_link", "global"));
   // cout << "transform "<< egoPoints[0][0] << " "<<egoPoints[0][1]<< " "<<egoPoints[0][2]<<endl;
   
   // tf::StampedTransform transform2;
   //   try{
-  //     tran->lookupTransform("/global", "/velodyne", input_time, transform2);
+  //     tran->lookupTransform("/global", "/velo_link", input_time, transform2);
   //   }
   //   catch (tf::TransformException &ex) {
   //     ROS_ERROR("%s",ex.what());
@@ -142,16 +142,16 @@ void  cloud_cb (const object_tracking::trackbox& input){
   PointCloud<PointXYZ> newBox;
   for(int i = 0; i < bBoxes.size(); i++ ){
     // cout << "before converting "<<getCpFromBbox(bBoxes[i])(0) << " "<<getCpFromBbox(bBoxes[i])(1)<<endl;
-    bBoxes[i].header.frame_id = "velodyne";
+    bBoxes[i].header.frame_id = "velo_link";
 //    bBoxes[i].header.frame_id = "velo_link";
     // try {
-    //   tran->waitForTransform("/global", "/velodyne", input_time, ros::Duration(10.0));
-    //   tran->lookupTransform("/global", "/velodyne", input_time, transform2);
+    //   tran->waitForTransform("/global", "/velo_link", input_time, ros::Duration(10.0));
+    //   tran->lookupTransform("/global", "/velo_link", input_time, transform2);
     // } catch (tf::TransformException ex) {
     //   ROS_ERROR("%s",ex.what());
     // }
     
-    tran->waitForTransform("/global", "/velodyne", input_time, ros::Duration(10.0));
+    tran->waitForTransform("/global", "/velo_link", input_time, ros::Duration(10.0));
 //    tran->waitForTransform("/global", "/velo_link", input_time, ros::Duration(10.0));
     pcl_ros::transformPointCloud("/global", bBoxes[i], newBox, *tran);
     bBoxes[i] = newBox;
@@ -181,14 +181,14 @@ void  cloud_cb (const object_tracking::trackbox& input){
   // processing targetPoints
   PointCloud<PointXYZ> egoTFPoints;
   targetPoints.header.frame_id = "global";
-  pcl_ros::transformPointCloud("/velodyne", targetPoints, egoTFPoints, *tran);
+  pcl_ros::transformPointCloud("/velo_link", targetPoints, egoTFPoints, *tran);
 //  pcl_ros::transformPointCloud("/velo_link", targetPoints, egoTFPoints, *tran);
 
   //processing visBBs
   PointCloud<PointXYZ> visEgoBB;
   for(int i = 0; i < visBBs.size(); i++){
     visBBs[i].header.frame_id = "global";
-    pcl_ros::transformPointCloud("/velodyne", visBBs[i], visEgoBB, *tran);
+    pcl_ros::transformPointCloud("/velo_link", visBBs[i], visEgoBB, *tran);
 //    pcl_ros::transformPointCloud("/velo_link", visBBs[i], visEgoBB, *tran);
     
     visBBs[i] = visEgoBB;
@@ -211,7 +211,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
       continue;
     }
 //    arrowsG.header.frame_id = "/velo_link";
-    arrowsG.header.frame_id = "/velodyne";
+    arrowsG.header.frame_id = "/velo_link";
     
     arrowsG.header.stamp= ros::Time::now();
     arrowsG.ns = "arrows";
@@ -257,7 +257,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
   // tracking points visualizing start---------------------------------------------
   
   visualization_msgs::Marker pointsY, pointsG, pointsR, pointsB;
-  pointsY.header.frame_id = pointsG.header.frame_id = pointsR.header.frame_id = pointsB.header.frame_id = "velodyne";
+  pointsY.header.frame_id = pointsG.header.frame_id = pointsR.header.frame_id = pointsB.header.frame_id = "velo_link";
 //  pointsY.header.frame_id = pointsG.header.frame_id = pointsR.header.frame_id = pointsB.header.frame_id = "velo_link";
   
   pointsY.header.stamp= pointsG.header.stamp= pointsR.header.stamp =pointsB.header.stamp = ros::Time::now();
@@ -331,7 +331,7 @@ void  cloud_cb (const object_tracking::trackbox& input){
 //   // bounding box visualizing start---------------------------------------------
 //   visualization_msgs::Marker line_list;
 // //  line_list.header.frame_id = "velo_link";
-//   line_list.header.frame_id = "velodyne";
+//   line_list.header.frame_id = "velo_link";
   
 //   line_list.header.stamp = ros::Time::now();
 //   line_list.ns =  "boxes";
@@ -425,11 +425,11 @@ int main (int argc, char** argv){
   ros::Subscriber sub = nh.subscribe ("track_box", 160, cloud_cb);   //订阅者  track_box -- 话题topic名
   ros::Subscriber sub2 = nh.subscribe ("/gps/odom", 1000, cloud_cb2);   //订阅者  /gps/odom -- 话题topic名
 
-//   message_filters::Subscriber<sensor_msgs::PointCloud2> Velodyne_sub(nh, "/velodyne_points", 1);  
+//   message_filters::Subscriber<sensor_msgs::PointCloud2> velo_link_sub(nh, "/velo_link_points", 1);  
 //   message_filters::Subscriber<nav_msgs::Odometry> odom_sub(nh, "/gps_odom", 1);  
 //   typedef message_filters::sync_policies::ApproximateTime< sensor_msgs::PointCloud2, nav_msgs::Odometry> MySyncPolicy;
-//   message_filters::Synchronizer<MySyncPolicy> sync(MySyncPolicy(10),  Velodyne_sub, odom_sub);
-// //  TimeSynchronizer<sensor_msgs::PointCloud2, nav_msgs::Odometry> sync(Velodyne_sub, odom_sub, 10);  
+//   message_filters::Synchronizer<MySyncPolicy> sync(MySyncPolicy(10),  velo_link_sub, odom_sub);
+// //  TimeSynchronizer<sensor_msgs::PointCloud2, nav_msgs::Odometry> sync(velo_link_sub, odom_sub, 10);  
 //   cout << "start syn" << endl;
 //   sync.registerCallback(boost::bind(&callback, _1, _2)); 
 //   cout << "start syn1" << endl;

@@ -169,7 +169,7 @@ visualization_msgs::Marker mark_cluster(pcl::PointCloud<pcl::PointXYZ> cloud_clu
   
   uint32_t shape = visualization_msgs::Marker::CUBE;  //定义立方体
   visualization_msgs::Marker marker; 
-  marker.header.frame_id = "/velodyne";  //frame_id
+  marker.header.frame_id = "/velo_link";  //frame_id
   marker.header.stamp = ros::Time::now(); 
   
   marker.ns = "cube";  // 简单命名

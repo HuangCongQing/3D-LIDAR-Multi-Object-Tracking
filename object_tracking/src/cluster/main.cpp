@@ -176,7 +176,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
 //*********************************************bBoxes visualization***************************************
 
   visualization_msgs::Marker line_list; //将候选框8个点连线
-  line_list.header.frame_id = "velodyne";   // 定义frame_id (rviz需要设置世界坐标系为velodyne)
+  line_list.header.frame_id = "velo_link";   // 定义frame_id (rviz需要设置世界坐标系为velo_link)
   line_list.header.stamp = ros::Time::now();
   line_list.ns =  "boxes";
   line_list.action = visualization_msgs::Marker::ADD;
