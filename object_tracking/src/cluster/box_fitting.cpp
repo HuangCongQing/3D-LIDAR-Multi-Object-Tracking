@@ -407,7 +407,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
         bbPoints.push_back(oneBbox); // 实体边界框集合
         // clustered2D[iCluster] = m;
         visualization_msgs::Marker mac = mark_cluster(clusteredPoints[iCluster]);   // 边框参数设置(还在for循环里面哈)   返回marker
-        ma.markers.push_back(mac);  // ma在这里 填充  实体框
+        ma.markers.push_back(mac);  // ma在这里 填充  实体框  最新产生的实体框选
 
     }  // 循环截止     循环的次数就是 初始聚类ID数量numCluster
     // std::cout << "boxFitting   bbPoints:" << bbPoints.size() << " 多少个边界框" << std::endl;
