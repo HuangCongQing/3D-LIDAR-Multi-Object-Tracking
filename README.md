@@ -1,10 +1,10 @@
 <!--
  * @Author: HCQ
  * @Date: 2020-10-27 10:18:56
- * @LastEditTime: 2020-11-09 12:34:19
+ * @LastEditTime: 2020-12-03 11:35:46
  * @LastEditors: Please set LastEditors
  * @Description: 3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）
- * @FilePath: \3D-LIDAR-Multi-Object-Tracking\README.md
+ * @FilePath: /3D-LIDAR-Multi-Object-Tracking/README.md
 -->
 # 3D-LIDAR-Multi-Object-Tracking
 3D-MOT(多目标检测和追踪)  （2020 · 秋）
@@ -12,6 +12,13 @@
 参考：https://github.com/k0suke-murakami/object_tracking
 
 @[双愚](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking) , 若fork或star请注明来源
+
+
+#### 版本
+*[main](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking)
+*[kitti](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking/tree/kitti)
+
+
 
 ### Intro
 This package includes **Ground Removal, Object Clustering, Bounding Box, IMM-UKF-JPDAF, Track Management and Object Classification** for 3D-LIDAR multi object tracking.
