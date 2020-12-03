@@ -1,7 +1,7 @@
 <!--
  * @Author: HCQ
  * @Date: 2020-10-27 10:18:56
- * @LastEditTime: 2020-12-03 11:35:46
+ * @LastEditTime: 2020-12-03 11:40:02
  * @LastEditors: Please set LastEditors
  * @Description: 3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）
  * @FilePath: /3D-LIDAR-Multi-Object-Tracking/README.md
@@ -15,8 +15,8 @@
 
 
 #### 版本
-*[main](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking)
-*[kitti](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking/tree/kitti)
+* [main](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking)
+* [kitti](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking/tree/kitti)
 
 
 
