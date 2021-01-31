@@ -18,7 +18,14 @@
 #### 版本(建议先看kitti分支)
 
 * [main](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking) : 使用个人采集数据集
-* [kitti](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking/tree/kitti) : **使用kitti数据集,初学者建议切换看这个分支,无须自己配置**🎉️
+* [kitti](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking/tree/kitti) : **使用kitti数据集,初学者建议切换看这个分支,无须自己配置**🎉️🎉️🎉️🎉️🎉️
+
+### 两文件夹介绍
+
+此仓库的两文件夹
+
+* **[object_tracking](object_tracking): 代码有详细注解,没有多目标检测部分,建议先看这个入门**🎉️🎉️🎉️🎉️
+* [object_tracking0](object_tracking0):原始代码(包含全部代码)
 
 ### Intro
 
@@ -29,10 +36,6 @@ The idea is mainly come from this [paper](https://repository.tudelft.nl/islandor
 
 * 论文阅读笔记：https://www.yuque.com/huangzhongqing/hre6tf/pcohs1
 * 代码分析笔记：https://www.yuque.com/huangzhongqing/hre6tf/no0h80
-
-[object_tracking](object_tracking): **代码有详细注解,没有多目标检测部分,建议先看这个入门**🎉️
-
-[object_tracking0](object_tracking0):原始代码(包含全部代码)
 
 下面介绍用kitti数据集相关操作
 
