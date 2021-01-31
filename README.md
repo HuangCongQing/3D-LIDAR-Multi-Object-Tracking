@@ -34,7 +34,6 @@ The idea is mainly come from this [paper](https://repository.tudelft.nl/islandor
 
 [object_tracking0](object_tracking0):原始代码(包含全部代码)
 
-
 下面介绍用kitti数据集相关操作
 
 ### Setup
@@ -138,6 +137,8 @@ rosrun object_tracking tracking
 ```
 
 ### Result
+
+![](https://cdn.nlark.com/yuque/0/2021/png/232596/1612101391954-0ff20177-dc25-4b69-8530-e76254c4dc64.png)
 
 ![arch](object_tracking//pic/result2.png)
 
