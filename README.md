@@ -34,7 +34,7 @@ The idea is mainly come from this [paper](https://repository.tudelft.nl/islandor
 
 代码对应论文：[3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）](https://repository.tudelft.nl/islandora/object/uuid:f536b829-42ae-41d5-968d-13bbaa4ec736?collection=education)
 
-* 论文阅读笔记：https://www.yuque.com/huangzhongqing/hre6tf/pcohs1
+* **论文阅读笔记：https://www.yuque.com/docs/share/81734320-21d8-4b50-993a-faa6d22d513f?# 《3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）》**
 * 代码分析笔记：https://www.yuque.com/huangzhongqing/hre6tf/no0h80
 
 下面介绍用kitti数据集相关操作
