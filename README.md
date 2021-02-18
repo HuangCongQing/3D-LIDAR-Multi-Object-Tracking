@@ -27,6 +27,28 @@
 * [object_tracking](object_tracking): **代码有详细注解,建议先看这个入门**🎉️🎉️🎉️🎉️
 * [object_tracking0](object_tracking0):原始代码(包含全部代码)
 
+目录
+
+```shell
+
+├── src
+│   ├── groundremove
+│   │   └──extract_ground.cpp // 提取地面 没有使用？！！！
+│   │   └── gaus_blur.cpp           //高斯模糊  #include "ground_removal.h"
+│   │   └── ground_removal.cpp   //地面去除 #include "gaus_blur.h"  各种函数的集合，没有主函数
+│   │   └── main.cpp  //  #include "ground_removal.h"
+│   └──  cluster
+│          ├── box_fitting.cpp        //  Bounding Box Fitting 边界框拟合
+│          ├── component_clustering.cpp// 利用连通组件聚类来区分提升点中的每个可能的对象。
+│          ├── main.cpp          //  #include "component_clustering.h"  "box_fitting.h"
+└── tracking
+    ├── Eigen
+    │   ├── ...
+    ├── ukf.cpp        //  Unscented Kalman Filter (UKF)无损滤波器
+    ├── imm_ukf_jpda.cpp//   #include "ukf.h" IMM-UK-JPDAF的“耦合”滤波器
+    └── main.cpp         //  #include "imm_ukf_jpda.h"
+```
+
 ### Intro
 
 This package includes **Ground Removal, Object Clustering, Bounding Box, IMM-UKF-JPDAF, Track Management and Object Classification** for 3D-LIDAR multi object tracking.
@@ -35,7 +57,7 @@ The idea is mainly come from this [paper](https://repository.tudelft.nl/islandor
 代码对应论文：[3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）](https://repository.tudelft.nl/islandora/object/uuid:f536b829-42ae-41d5-968d-13bbaa4ec736?collection=education)
 
 * **论文阅读笔记：https://www.yuque.com/docs/share/81734320-21d8-4b50-993a-faa6d22d513f?# 《3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）》**
-* 代码分析笔记：https://www.yuque.com/huangzhongqing/hre6tf/no0h80
+* 代码分析笔记：https://www.yuque.com/huangzhongqing/ngixrc/no0h80
 
 下面介绍用kitti数据集相关操作
 
