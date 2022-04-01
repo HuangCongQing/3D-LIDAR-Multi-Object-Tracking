@@ -10,6 +10,7 @@
 # 3D-LIDAR-Multi-Object-Tracking
 
 3D-MOT(多目标检测和追踪) 代码有详细注解 （2020 · 秋）
+更多内容,请参见公众号:双愚
 
 参考：https://github.com/k0suke-murakami/object_tracking
 
@@ -57,7 +58,10 @@ The idea is mainly come from this [paper](https://repository.tudelft.nl/islandor
 代码对应论文：[3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）](https://repository.tudelft.nl/islandora/object/uuid:f536b829-42ae-41d5-968d-13bbaa4ec736?collection=education)
 
 * **论文阅读笔记：https://www.yuque.com/docs/share/81734320-21d8-4b50-993a-faa6d22d513f?# 《3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）》**
-* 代码分析笔记：https://www.yuque.com/huangzhongqing/ngixrc/no0h80
+* 代码分析笔记：https://www.yuque.com/docs/share/c125da75-50fd-4d49-bfc9-08ba42fc3188?# 《Code（3D-LIDAR Multi Object Tracking）》
+链接有效期至 2022-04-04 18:15:26
+
+更多内容,请参见公众号:**双愚**
 
 下面介绍用kitti数据集相关操作
 
