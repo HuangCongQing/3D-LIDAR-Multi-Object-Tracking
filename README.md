@@ -59,7 +59,6 @@ The idea is mainly come from this [paper](https://repository.tudelft.nl/islandor
 
 * **论文阅读笔记：https://www.yuque.com/docs/share/81734320-21d8-4b50-993a-faa6d22d513f?# 《3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）》**
 * 代码分析笔记：https://www.yuque.com/docs/share/c125da75-50fd-4d49-bfc9-08ba42fc3188?# 《Code（3D-LIDAR Multi Object Tracking）》
-链接有效期至 2022-04-04 18:15:26
 
 更多内容,请参见公众号:**双愚**
 
