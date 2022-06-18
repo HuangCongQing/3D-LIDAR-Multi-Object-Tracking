@@ -179,3 +179,11 @@ rosrun object_tracking tracking
 Copyright (c) [双愚](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking). All rights reserved.
 
 Licensed under the [MIT](./LICENSE) License.
+
+
+
+
+
+**最后，如果您想要支持我的工作，请扫描下面的二维码**
+
+![image](https://user-images.githubusercontent.com/20675770/174442478-705129f7-ca4d-4e89-9b21-7e1b84817940.png)
