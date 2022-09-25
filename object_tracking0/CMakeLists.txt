@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(object_tracking0)
 
-set(CMAKE_CXX_STANDARD 11)
+# set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14) # fix: error: ‘plus’ is not a member of ‘pcl::traits’
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)

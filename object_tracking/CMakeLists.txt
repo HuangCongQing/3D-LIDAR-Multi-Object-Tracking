@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(object_tracking)
 
-set(CMAKE_CXX_STANDARD 11)
+# set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14) # fix: error: ‘plus’ is not a member of ‘pcl::traits’
+
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -56,12 +59,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 
+# set(PCL_INCLUDE_DIRS /usr/include/pcl-1.9/)
 
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_LIBRARIES}
-  ${PCL_INCLUDE_DIRS}
+  # ${PCL_INCLUDE_DIRS}
 )
 
 #add_executable(extract_ground src/extract_ground.cpp src/extract_ground.h)
