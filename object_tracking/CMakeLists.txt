@@ -78,6 +78,9 @@ include_directories(
 
 #set(SOURCE_FILES src/main.cpp src/gaus_blur.cpp src/gaus_blur.h src/ground_removal.cpp src/ground_removal.h src/component_clustering.cpp src/component_clustering.h src/box_fitting.cpp src/box_fitting.cpp src/ukf.cpp)
 
+
+
+
 set(SOURCE_FILES1 src/groundremove/main.cpp src/groundremove/gaus_blur.cpp src/groundremove/ground_removal.cpp )
 add_executable(ground ${SOURCE_FILES1})
 target_link_libraries(ground ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
@@ -93,3 +96,7 @@ add_executable(tracking ${SOURCE_FILES3})
 target_link_libraries(tracking ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 
+# 加载pcd
+set(SOURCE_FILES4 src/pcdload/pcd_load.cpp )
+add_executable(load ${SOURCE_FILES4})
+target_link_libraries(load ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

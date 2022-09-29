@@ -109,7 +109,7 @@ void filterCloud(pcl::PointCloud<pcl::PointXYZI>::Ptr cloud, pcl::PointCloud<Poi
         float z = cloud->points[i].z;
         float intensity = cloud->points[i].intensity;
         float distance = sqrt(x * x + y * y);
-        if( (y > 60 || y < -15) || ( x < -25 || x > 25 ) || (y < 4.5 && y > -4 && x < 2 && x > -3) 
+        if( (y > 60 || y < -60) || ( x < -25 || x > 100 ) || (y < 4.5 && y > -4 && x < 2 && x > -3) 
             ) {
             continue; // filter out
         }
@@ -587,7 +587,8 @@ int main (int argc, char **argv){
     cout << car_down << "  "<< car_up << "  " << car_left << "  " << car_right << "  " << row_offset << "  " << col_offset<<endl;
 
 
-    ros::Subscriber sub = nh_.subscribe("/velodyne_points", 2, cloud_callback);
+    // ros::Subscriber sub = nh_.subscribe("/velodyne_points", 2, cloud_callback);
+    ros::Subscriber sub = nh_.subscribe("/kitti/velo/pointcloud", 2, cloud_callback);
     nh_.param<float>("tHmax", tHmax, -2.1);
     nh_.param<float>("tHmin", tHmin, -2.4);
     filter_mid_area_limitation();

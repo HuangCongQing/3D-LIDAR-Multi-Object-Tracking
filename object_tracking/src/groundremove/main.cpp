@@ -142,7 +142,7 @@ int main(int argc, char **argv)
   ros::NodeHandle nh;
 
 //订阅者 ： "velodyne_points"  "/kitti/velo/pointcloud" --话题名(可以根据不同数据集修改话题名)   cloud_cb--回调函数   
-  ros::Subscriber sub = nh.subscribe("/kitti/velo/pointcloud", 160, cloud_cb);   // kitti
+  ros::Subscriber sub = nh.subscribe("/kitti/velo/pointcloud", 160, cloud_cb);   // kitti 输入修改
   // ros::Subscriber sub = nh.subscribe("velodyne_points", 160, cloud_cb);   // changshu.bag
   nh.param<float>("filter_z_max", filter_z_max, 1.0);                   // 参数服务器默认参数（z轴上的滤波）
   nh.param<float>("filter_z_min", filter_z_min, -3.0);                  // nh.param<std::string>("default_param", default_param, "default_value");
