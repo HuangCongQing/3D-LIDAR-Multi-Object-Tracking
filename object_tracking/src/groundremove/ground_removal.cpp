@@ -22,11 +22,11 @@ using namespace pcl;
 //int numBin = 120;
 //const int numMedianKernel = 1;
 float rMin = 3.4;  // 见论文图
-float rMax = 120;
+float rMax = 400;
 //const float tHmin = -2.15;
- float tHmin = -2.0;  // 高度
+ float tHmin = -50.0;  // 高度
 //float tHmin = -1.9;
- float tHmax = -0.4;
+ float tHmax = -2.5;
 //float tHmax = -1.0;
 
 float tHDiff = 0.4;
