@@ -112,7 +112,7 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
   pub.publish(output);  // 发布者
   
   counta ++;
-  cout << "cluster Frame: "<<counta << "----------------------------------------"<< endl;   // 帧数
+  cout << "当前帧数cluster Frame: "<<counta << "----------------------------------------"<< endl;   // 帧数
 
   visualization_msgs::MarkerArray ma;  //实体框
 
@@ -122,6 +122,8 @@ void  cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input){  // f非地面�
     
   boxArray.header = input->header;
   boxArray.box_num = bBoxes.size();
+
+  cout << "最终可视化聚类num is "<<bBoxes.size()<<endl; // 聚类的数量
   // 填充boxArray
   for(int i = 0;i < bBoxes.size();i++)
   {

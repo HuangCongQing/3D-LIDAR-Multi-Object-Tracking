@@ -17,26 +17,27 @@ using namespace cv;
 // float picScale = 30;
 float picScale = 900/roiM;   // ???
 int ramPoints = 80;
-int lSlopeDist = 1.0;
+int lSlopeDist =  0.1; // 1.0;
 ////////////////////////int lSlopeDist = 3.0;
 ////////////////////////int lnumPoints = 300;
-int lnumPoints = 5;
+int lnumPoints = 5;  //框内点数
 
 //////////////////////////////float sensorHeight = 1.73;
-float sensorHeight = 2;   // 激光雷达距离地面高度
+float sensorHeight = 35;   // 激光雷达距离地面高度
 // float tHeightMin = 1.2;
-float tHeightMin = 0.8;
-float tHeightMax = 2.6;
+float tHeightMin = -40;
+float tHeightMax = -2;
 // float tWidthMin = 0.5;
 // float tWidthMin = 0.4;
 float tWidthMin = 0.2;//0.25
-float tWidthMax = 3.5;
+float tWidthMax = 100;
 float tLenMin = 0.2;//0.5
-float tLenMax = 14.0;
-float tAreaMax = 20.0;
+float tLenMax = 50.0;
+float tAreaMax = 100.0;
 //float tRatioMin = 1.3;
 //float tRatioMax = 5.0;
 
+//  长宽比
 float tRatioMin = 1;
 float tRatioMax = 8.0;
 
@@ -94,6 +95,8 @@ void getPointsInPcFrame(Point2f rectPoints[], vector<Point2f>& pcPoints, int off
     }
 }
 
+
+// 基于规则过滤
 bool ruleBasedFilter(vector<Point2f> pcPoints, float maxZ, int numPoints){
     bool isPromising = false; // 是否舍弃此聚类
     //minnimam points thresh
@@ -126,21 +129,25 @@ bool ruleBasedFilter(vector<Point2f> pcPoints, float maxZ, int numPoints){
     mass = area*height;  //框 体积
     ratio = length/width;  // 长宽比
 
-    // cout<< "height is " <<height<<endl;  //  2.3821
-    // cout<< "width is " <<width<<endl; // 2.17553
-    // cout<< "length is " <<length<<endl; //4.92502
-    // cout<< "area is " <<area<<endl; //10.7145
-    // cout<< "mass is " <<mass<<endl; //25.523
-    // cout<< "ratio is " <<ratio<<endl; // 2.26383
+    cout<< "height is " <<height<<endl;  //  2.3821
+    cout<< "width is " <<width<<endl; // 2.17553
+    cout<< "length is " <<length<<endl; //4.92502
+    cout<< "area is " <<area<<endl; //10.7145
+    cout<< "mass is " <<mass<<endl; //25.523
+    cout<< "ratio is " <<ratio<<endl; // 2.26383
 
     //start rule based filtering   // 开始 Rule-based Filter
     if(height > tHeightMin && height < tHeightMax){ //(0.8  2.6) tHeightMin = 0.8;  tHeightMax = 2.6;
+        cout<< "11111111111111111111" <<ratio<<endl; // 
         if(width > tWidthMin && width < tWidthMax){ // (0.2  3.5)
             if(length > tLenMin && length < tLenMax){ // (0.2,  14)
                 if(area < tAreaMax){  // tAreaMax = 20.0;
+                    cout<< "222222222222222222222222222222222" <<ratio<<endl; // 
                     if(numPoints > mass*tPtPerM3){   // tPtPerM3 = 8;
                         if(length > minLenRatio){ // minLenRatio = 3.0;
+                            cout<< "33333333333333333333333333333333" <<ratio<<endl; // 
                             if(ratio > tRatioMin && ratio < tRatioMax){ //长宽比 (1.0,  8.0)
+                                cout<< "444444444444444444444444444444" <<ratio<<endl; // 
                                 isPromising = true;
                                 return isPromising;
                             }
@@ -154,7 +161,8 @@ bool ruleBasedFilter(vector<Point2f> pcPoints, float maxZ, int numPoints){
             }
         }
     }
-    else return isPromising;
+    else 
+        return isPromising;
 }
 
 // getBoundingBox引用  制作实体框====================输入为clusteredPoints[iCluster]：每个聚类的所有三维点坐标
@@ -235,7 +243,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 
         //  cout << "the number of cluster i is "<< numPoints <<endl;
 
-        // 循环每一聚类里面的点
+        // 循环每一聚类里面的点=========================================================================================
         for (int iPoint = 0; iPoint < clusteredPoints[iCluster].size(); iPoint++){
             float pX = clusteredPoints[iCluster][iPoint].x;   // 聚类中每个点的x，y，z
             float pY = clusteredPoints[iCluster][iPoint].y;
@@ -253,11 +261,11 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
             int offsetX = picX + offsetInitX;
             int offsetY = picY + offsetInitY;
             
-/*            std::cout << "----------------------" << std::endl;
-            std::cout << offsetX << std::endl; // 举例 444
-            std::cout << offsetY << std::endl; // 举例 452
-            std::cout << "---------------------" << std::endl; 
-*/
+            /*            std::cout << "----------------------" << std::endl;
+                        std::cout << offsetX << std::endl; // 举例 444
+                        std::cout << offsetY << std::endl; // 举例 452
+                        std::cout << "---------------------" << std::endl; 
+            */
 
           //  m.at<uchar>(offsetY, offsetX) = 255;
             pointVec[iPoint] = Point(offsetX, offsetY); // 偏移量
@@ -305,6 +313,7 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
 
         // start l shape fitting for car like object 开始为汽车之类的物体 l shape fitting
         // lSlopeDist = 10000, lnumPoints = 30000;
+        std::cout << " slopeDist: "<< slopeDist<< " numPoints: "<< numPoints<< " maxMy: "<< maxMy << std::endl; // 举例 444
         if(slopeDist > lSlopeDist && numPoints > lnumPoints && (maxMy > 8 || maxMy < -5)){ // int lSlopeDist = 1.0;  int lnumPoints = 5;判断框的大小以及框内的点数
         // if(1){
             float maxDist = 0;
@@ -351,7 +360,8 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
             // std::cout << "boxFitting  maxZ " << maxZ << std::endl;   //  boxFitting  maxZ 0.525725
             //  最后一步:消除大多数无关对象，例如墙壁，灌木丛，建筑物和树木。实现尺寸阈值化以实现此目的。
             bool isPromising = ruleBasedFilter(pcPoints, maxZ, numPoints);    //   比如聚类33，每一类里面有多少点 numPoints(四个点,z最大值, 每个聚类中的点数)
-            // std::cout << "boxFitting   isPromising:" << isPromising << std::endl; // 1, 0
+            std::cout << "boxFitting   isPromising:" << isPromising << std::endl; // 1, 0
+            // isPromising = true;
             if(!isPromising) continue;  // 没有,就舍弃此聚类,到下一个循环
         }
         else{
@@ -362,7 +372,10 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
             getPointsInPcFrame(rectPoints, pcPoints, offsetInitX, offsetInitY);
             // rule based filter
             bool isPromising = ruleBasedFilter(pcPoints, maxZ, numPoints);
+            // isPromising = true;
             if(!isPromising) continue;   // 没有,就舍弃此聚类,到下一个循环
+
+
         //     // for visualization
         //    for( int j = 0; j < 4; j++ )
         //        line( m, rectPoints[j], rectPoints[(j+1)%4ne], Scalar(255,255,0), 1, 8 );
@@ -410,11 +423,11 @@ void getBoundingBox(vector<PointCloud<PointXYZ>>  clusteredPoints,
         ma.markers.push_back(mac);  // ma在这里 填充  实体框  最新产生的实体框选
 
     }  // 循环截止     循环的次数就是 初始聚类ID数量numCluster
-    // std::cout << "boxFitting   bbPoints:" << bbPoints.size() << " 多少个边界框" << std::endl;
+    std::cout << "boxFitting之后，最终得到   bbPoints:" << bbPoints.size() << " 个边界框" << std::endl;
 }
 
 
-//  候选框拟合处理
+//  候选框拟合处理 main入口
 vector<PointCloud<PointXYZ>> boxFitting(PointCloud<PointXYZ>::Ptr elevatedCloud,
                 array<array<int, numGrid>, numGrid> cartesianData,
                 int numCluster,visualization_msgs::MarkerArray& ma)  // ma数据
