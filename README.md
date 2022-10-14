@@ -15,6 +15,7 @@
 参考：https://github.com/k0suke-murakami/object_tracking
 * 🔥pcl学习：https://github.com/HuangCongQing/pcl-learning
 * 🔥ros学习：https://github.com/HuangCongQing/ROS
+* 🔥想学习**深度学习方向点云目标检测&语义分割**可参考：https://github.com/HuangCongQing/3D-Point-Clouds
 
 
 @[双愚](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking) , 若fork或star请注明来源
