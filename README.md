@@ -23,6 +23,9 @@
 
 **微信交流群二维码每周都更新一次，请关注公众号【双愚】后台回复目标检测加群**
 * 更多自动驾驶相关交流群，欢迎扫码加入：[自动驾驶感知(PCL/ROS+DL)：技术交流群汇总(新版)](https://mp.weixin.qq.com/s?__biz=MzI4OTY1MjA3Mg==&mid=2247486575&idx=1&sn=3145b7a5e9dda45595e1b51aa7e45171&chksm=ec2aa068db5d297efec6ba982d6a73d2170ef09a01130b7f44819b01de46b30f13644347dbf2#rd)
+![318b7a4da5e87b6bdb416d18d4f80dd](https://github.com/HuangCongQing/3D-LIDAR-Multi-Object-Tracking/assets/20675770/7ff0e837-4719-4eee-9629-9dcc5920dcd6)
+
+  
 
 #### 版本(建议先看kitti分支)
 
@@ -65,8 +68,8 @@ The idea is mainly come from this [paper](https://repository.tudelft.nl/islandor
 
 代码对应论文：[3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）](https://repository.tudelft.nl/islandora/object/uuid:f536b829-42ae-41d5-968d-13bbaa4ec736?collection=education)
 
-* **论文阅读笔记：https://t.zsxq.com/10VBokCzF《3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）》**
-* 代码分析笔记：https://t.zsxq.com/10VBokCzF《Code（3D-LIDAR Multi Object Tracking）》
+* **论文阅读笔记：https://t.zsxq.com/10VBokCzF   《3D-LIDAR Multi Object Tracking for Autonomous Driving（Master论文）》**
+* 代码分析笔记：https://t.zsxq.com/10VBokCzF  《Code（3D-LIDAR Multi Object Tracking）》
 
 更多内容,请参见公众号:**双愚**
 
