@@ -96,7 +96,7 @@ Make sure you have the following is installed:
 
 ### 编译
 
-将本仓库下的2个文件夹移动到catkin_wp/src下，然后执行下面操作
+将本仓库下的2个文件夹（object_tracking/object_tracking0）移动到catkin_wp/src下，然后执行下面操作
 
 ```shell
 // 创建环境变量 src中运行
@@ -170,7 +170,7 @@ rviz
 
 #  推荐运行launch
 roslaunch  object_tracking test.launch
-#  复杂
+#  复杂不推荐
 rosrun object_tracking ground
 rosrun object_tracking cluster
 rosrun object_tracking tracking
